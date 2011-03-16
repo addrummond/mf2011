@@ -53,7 +53,7 @@ tglobs = dict(int=int, str=str, url_for=conf.url_for, websafe=web.websafe)
 render = web.template.render('templates/', globals=tglobs)
 
 def render_wrapper(title, template, js_includes=[]):
-    if web.ctx.env['HTTP_ACCEPT'].find('text/json') != -1:
+    if web.input().get('_ajax'):
         return template
     else:
         return render.wrapper(title, template, js_includes)
