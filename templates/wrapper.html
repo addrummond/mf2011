@@ -1,0 +1,54 @@
+$def with (subtitle, contents, js_includes=[])
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<link href="$url_for('/main.css')" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+/* <![CDATA[ */ BASE_URI="$url_for('')" /* ]]> */
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="$url_for('/static/main.js')"></script>
+$for inc in js_includes:
+    <script src="$inc"></script>
+<title>Mayfest 2011 $(' - ' + subtitle if subtitle else '')</title>
+</head>
+<body>
+
+<div class="pre"></div>
+<h1>Mayfest 2011</h1>
+<div class="post"></div>
+
+<h2><span style="vertical-align: bottom">Pronouns: A Subtitle</span></h2>
+
+<div id="main">
+<ul class="nav">
+<li><a href="$url_for('/')">Home</a></li>
+<li><a href="$url_for('/schedule')">Schedule</a></li>
+<li><a href="$url_for('/speakers')">Speakers</a></li>
+<li><a href="$url_for('/register')">Register</a></li>
+<li><a href="$url_for('/directions')">Directions</a></li>
+<li><a href="$url_for('/accommodation')">Accommodation</a></li>
+</ul>
+
+<hr/>
+
+<div id="contents">
+$:contents
+</div>
+
+</div>
+
+<hr/>
+<div class="contact">
+<p>
+Committee: Dustin Alfonso Chacón, <a href="http://ling.umd.edu/~alexd">Alex Drummond</a>, Kate Harrigan, Sol Lago &amp; Daniel Parker.
+</p>
+<p>
+<a href="mailto:mayfest2011umd@gmail.com">mayfest2011@gmail.com</a>
+</p>
+</div>
+
+</body>
+</html>

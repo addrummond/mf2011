@@ -1,0 +1,20 @@
+$def with (speaker_list)
+
+<h3>Speakers</h3>
+<ul>
+$def speaker(info):
+    <li>
+    $if info.homepage:
+        <a href="$info.homepage">
+    $:(websafe(info.name) + ('</a>,' if info.homepage else ','))
+    $info.institution
+    </li>
+    $if info.abstractfile:
+        <a href="$url_for('/static/' + info.abstractfile)">[abstract]</a>
+$for s in speaker_list:
+    $:speaker(s)
+</ul>
+
+<p>
+Abstracts will be uploaded when available.
+</p>
