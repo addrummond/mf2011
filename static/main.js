@@ -1,6 +1,7 @@
 history = window.history || (typeof(history) != "undefined" ? history : null);
 
 function loadpage(url, name) {
+    return; // Not working atm.
     var alreadyError = false;
     $.ajax({
         url: url,

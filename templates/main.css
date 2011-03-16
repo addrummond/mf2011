@@ -6,6 +6,8 @@ $ DARKER_BACKGROUND = "#F2EDE8"
 $ HEADING_COLOR = "#5C5215"
 $ MEDIUM_COLOR = "#30385E"
 $ LIGHT_COLOR = "#6E79AE"
+$ H_MEDIUM_COLOR = "#10193E"
+$ H_LIGHT_COLOR = "#2D3147"
 $ BAND_COLOR = "#C4A787"
 
 $ LARGE_FONT_SIZE = "16pt"
@@ -142,7 +144,7 @@ h3 {
     padding: 2px 10px 2px 10px;
     border-radius: 6px;
     -moz-border-radius: 5px;
-$#    background: -webkit-gradient(radial, 33% 50%, 0, 33% 50%, 60, from($MEDIUM_COLOR), to($LIGHT_COLOR));
+    -webkit-border-radius: 5px;x
     $radial_gradient(MEDIUM_COLOR, LIGHT_COLOR)
     color: #FFFFFF;
     font-weight: bold;
@@ -151,7 +153,7 @@ $#    background: -webkit-gradient(radial, 33% 50%, 0, 33% 50%, 60, from($MEDIUM
     float: left;
 }
 .nav li:hover {
-    background: black;
+    background: $radial_gradient(H_MEDIUM_COLOR, H_LIGHT_COLOR);
     cursor: pointer;
 }
 .nav li a {
