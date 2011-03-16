@@ -1,4 +1,8 @@
+#!/usr/bin/python
 import web
+import conf
+import os
+import os.path
 
 class Opts(object):
     """Wrap a dictionary so we can use the more concise foo.bar syntax to
@@ -45,11 +49,10 @@ urls = (
 
 app = web.application(urls, globals())
 
-tglobs = dict(int=int, str=str, url_for=lambda x: x, websafe=web.websafe)
+tglobs = dict(int=int, str=str, url_for=conf.url_for, websafe=web.websafe)
 render = web.template.render('templates/', globals=tglobs)
 
 def render_wrapper(title, template, js_includes=[]):
-    print "_______\n", web.ctx.env['HTTP_ACCEPT'], "\n\n"
     if web.ctx.env['HTTP_ACCEPT'].find('text/json') != -1:
         return template
     else:
@@ -63,7 +66,7 @@ class schedule:
         return render_wrapper('Schedule', render.schedule())
 
 # Read speakers CSV db.
-speakers_f = open("speakers.txt")
+speakers_f = open(os.path.join(conf.WORKING_DIR, "speakers.txt"))
 speaker_list = []
 for l in speakers_f:
     l = l.rstrip('\n')
@@ -86,15 +89,15 @@ class register:
 
         f = None
         try:
-            f = open("registrations", "a")
+            f = open(os.path.join(conf.WORKING_DIR, "registrations"), "a")
             def ersatz(s): return s.replace("%", "%25").replace("\n", "%0a")
             for k in ('name', 'aff', 'email', 'friday', 'saturday', 'reception', 'crash', 'comments'):
                 f.write("%s: %s\n" % (k, data[k] if data.has_key(k) else ''))
             f.write('\n')
-        except IOError, e:
+        except IOError:
             web.internalerror()
         finally:
-            f.close()
+            if f: f.close()
 
         return render_wrapper('Register', render.register_success())
 
@@ -108,6 +111,7 @@ class accommodation:
 
 class maincss:
     def GET(self):
+        web.header("Content-Type", "text/css; charset=utf-8")
         return render.main()
 
 if __name__ == "__main__": app.run()

@@ -47,7 +47,7 @@ h1 {
     float:left;
     margin:0;
     padding: 0;
-    background-image: url('$url_for('static/mf2011logo.png')');
+    background-image: url('$url_for('/static/mf2011logo.png')');
     background-repeat: no-repeat;
     width: 385px;
     display: block;
