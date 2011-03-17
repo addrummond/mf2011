@@ -101,7 +101,7 @@ class register:
         finally:
             if f: f.close()
 
-        return render_wrapper('Register', render.register_success())
+        return render_wrapper('Register', render.register_success(Opts(data)))
 
 class directions:
     def GET(self):

@@ -1,3 +1,42 @@
+$def with (reg)
+
 <p>
-You have successfully registered. Thank you.
+Thank you for registering. You gave the following details:
+</p>
+<table class="register">
+<tr>
+<td>Full name</td><td>$reg.name</td>
+</tr>
+<tr>
+<td>Affiliation</td><td>$reg.aff</td>
+</tr>
+<tr>
+<td>Email address</td><td>$reg.email</td>
+</tr>
+</table>
+<p>
+You are
+$if reg.friday == "no":
+    <b>not</b>
+attending the sessions on Friday 5/6.
+</p>
+<p>
+You are
+$if reg.saturday == "no":
+    <b>not</b>
+attending the sessions on Saturday 5/7.
+</p>
+<p>
+You are
+$if reg.reception == "no":
+    <b>not</b>
+attending the Mayfest dinner/party on Friday evening (5:30pm).
+</p>
+<p>
+You
+$if reg.crash != "no":
+    requested
+$else:
+    did <b>not</b> request
+crash space.
 </p>
