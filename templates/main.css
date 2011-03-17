@@ -151,7 +151,7 @@ h3 {
     -webkit-border-radius: 5px;x
     $radial_gradient(MEDIUM_COLOR, LIGHT_COLOR)
     color: #FFFFFF;
-    font-weight: bold;
+    font-weight: normal;
     list-style: none;
     margin: 0 10px 0.5em 0;
     float: left;
