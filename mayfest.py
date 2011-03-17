@@ -8,6 +8,7 @@ import conf
 import StringIO
 import urllib
 import fcntl
+import time
 
 def lock_and_open(filename, mode):
     if os.path.exists(filename):
@@ -77,7 +78,7 @@ def render_wrapper(title, template, js_includes=[]):
         # Bit of a hack -- need to make sure they still get the additional js includes.
         jss = StringIO.StringIO()
         for inc in js_includes:
-            jss.write(u'\n<script type="text/javascript" src="%s"></script>\n' % conf.url_for(inc))
+            jss.write(u'\n<script type="text/javascript" src="%s"></script>\n' % inc)
         return jss.getvalue() + unicode(template)
     else:
         return render.wrapper(title, template, js_includes)
@@ -116,9 +117,10 @@ class register:
         f = None
         try:
             f = lock_and_open(os.path.join(conf.WORKING_DIR, "registrations"), "a")
-            def ersatz(s): return s.replace("%", "%25").replace("\n", "%0a")
+            f.write("--\n%s\n" % time.ctime())
+	    def ersatz(s): return s.replace("%", "%25").replace("\r", "%0d").replace("\n", "%0a")
             for k in ('name', 'aff', 'email', 'friday', 'saturday', 'reception', 'crash', 'comments'):
-                f.write("%s: %s\n" % (k, data[k] if data.has_key(k) else ''))
+                f.write("%s: %s\n" % (k, ersatz(data[k]) if data.has_key(k) else ''))
             f.write('\n')
         except IOError:
             web.internalerror()

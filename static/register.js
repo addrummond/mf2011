@@ -9,17 +9,19 @@ function regHandler() {
     }
     else {
         var data = { ajax: "yes" };
-        var inps = $("#register input, #register textarea");
+        var inps = $("#register input");
         for (var i = 0; i < inps.length; ++i) {
             var inp = $(inps[i]);
             if (inp.attr('type') == "text")
                 data[inp.attr('name')] = inp.val();
-            else if (inp.attr('type') == "checkbox" && inp.val())
-                data[inp.attr('name')] = inp.val();
-            else if (inp[0].tagName == "textarea")
-                data[inp.attr('name')] = inp.val();
+            else if (inp.attr('type') == "checkbox" && inp.attr('checked'))
+                data[inp.attr('name')] = inp.attr('checked');
         }
-        
+        var tas = $("#register textarea");
+        for (var i = 0; i < tas.length; ++i) {
+            var ta = $(tas[i]);
+            data[ta.attr('name')] = ta.val();
+        }
         loadpage({type: 'POST', url: BASE_URI + '/register', data: data }, null, false/*no need because URL doesn't change.*/);
         
         return false;
