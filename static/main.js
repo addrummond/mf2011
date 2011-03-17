@@ -1,4 +1,5 @@
-history = window.history || (typeof(history) != "undefined" ? history : null);
+if (! history)
+    history = window.history;
 
 var baseTime;
 
