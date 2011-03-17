@@ -139,5 +139,7 @@ class maincss:
         web.header("Content-Type", "text/css; charset=utf-8")
         return render.main()
 
+application = app.wsgifunc()
+
 if __name__ == "__main__":
     app.run()
