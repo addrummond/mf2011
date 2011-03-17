@@ -1,8 +1,10 @@
 #!/usr/bin/python
+import sys,os,os.path
+BASE = os.path.dirname(__file__)
+sys.path.append(BASE)
+
 import web
 import conf
-import os
-import os.path
 import StringIO
 import urllib
 import fcntl
@@ -68,7 +70,7 @@ urls = (
 app = web.application(urls, globals())
 
 tglobs = dict(int=int, str=str, url_for=conf.url_for, websafe=web.websafe)
-render = web.template.render('templates/', globals=tglobs)
+render = web.template.render(os.path.join(BASE, 'templates/'), globals=tglobs)
 
 def render_wrapper(title, template, js_includes=[]):
     if web.input().get('_ajax'):
@@ -107,7 +109,6 @@ class register:
 
     def POST(self):
         data = web.input(friday="no", saturday="no", reception="no", crash="no")
-        print data
         for k in ('name', 'aff', 'email'):
             if not data.has_key(k) or not data[k]:
                 return render_wrapper('Register', render.register("You must enter your full name, affiliation and email address."), register.JS_EXTRAS)
