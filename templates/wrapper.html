@@ -1,4 +1,4 @@
-$def with (subtitle, contents, js_includes=[])
+$def with (subtitle, contents, includes=[])
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -10,8 +10,11 @@ $def with (subtitle, contents, js_includes=[])
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="$url_for('/static/main.js')"></script>
-$for inc in js_includes:
-    <script src="$inc"></script>
+$for inc in includes:
+    $if inc.endswith('.js'):
+        <script type="text/javascript" src="$inc"></script>
+    $elif inc.endswith('.css'):
+        <link href="$inc" rel="stylesheet" type="text/css" />
 <title>Mayfest 2011 $(' - ' + subtitle if subtitle else '')</title>
 </head>
 <body>

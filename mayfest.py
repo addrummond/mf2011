@@ -79,7 +79,9 @@ class speakers:
 
 class register:
     def GET(self):
-        return render_wrapper('Register', render.register(), [tglobs['url_for']('/static/register.js')])
+        return render_wrapper('Register', render.register(),
+                              [conf.url_for('/static/register.js'),
+                               conf.url_for('/static/jquery.simplemodal.js')])
 
     def POST(self):
         data = web.input(friday="no", saturday="no", reception="no", crash="no")

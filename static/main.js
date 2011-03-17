@@ -5,6 +5,7 @@ if (! history)
 var baseTime;
 
 $(document).ready(function() {
+    return;
     baseTime = new Date().getTime();
 
     if (history && history.pushState) {
