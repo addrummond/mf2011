@@ -64,6 +64,10 @@ function loadpage(request, name, pushState) {
         if (! loadError) {
             loadError = true;
             alert("There was an error loading the page.");
+            $("<div>").html(
+                "<p class='error'>There was an error loading the page.</p>" +
+                "<p><span class='simplemodal-close'>&laquo; back</span></p>"
+            ).modal({closeHTML: ""});
         }
     };
 
@@ -89,8 +93,9 @@ function loadpage(request, name, pushState) {
                 }
             }
         }
-        if (loadedHtml)
+        if (loadedHtml) {
             $("#contents").html(loadedHtml).fadeIn("normal");
+        }
         else
             timeoutId = setInterval(whileNotLoaded, 100);
     });

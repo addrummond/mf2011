@@ -1,16 +1,13 @@
 function regHandler() {
-    alert("XXX");
     if (! verifyRegistration($("#register")[0])) {
         $("<div>").html(
             "<p class='error'>The form was not completed.</p>" +
-                "<p>Please make sure you enter your name, email address, and academic affiliation.</p>" +
-                "<p><span class='simplemodal-close'>&laquo;back to form</span></p>").modal({
-                    closeHTML: ""
-                });
+            "<p>Please make sure you enter your name, email address, and academic affiliation.</p>" +
+            "<p><span class='simplemodal-close'>&laquo;back to form</span></p>"
+        ).modal({closeHTML: ""});
         return false;
     }
     else {
-        alert("AJ");
         var data = { ajax: "yes" };
         var inps = $("#register input, #register textarea");
         for (var i = 0; i < inps.length; ++i) {
@@ -25,7 +22,6 @@ function regHandler() {
         
         loadpage({type: 'POST', url: BASE_URI + '/register', data: data }, null, false/*no need because URL doesn't change.*/);
         
-        e.preventDefault();
         return false;
     }
 }
