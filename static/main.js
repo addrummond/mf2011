@@ -1,6 +1,7 @@
 if (! history)
     history = window.history;
 
+// See comment for $(window).bind below.
 var baseTime;
 
 $(document).ready(function() {
@@ -35,8 +36,24 @@ $(document).ready(function() {
     }
 });
 
+//
+// This involves some slightly nasty polling when the server is slow.
+// To make the loading feel responsive, we want to begin fading the page
+// out as soon as the user clicks the button. But since JS does't have
+// real threading, that means we can only be notified asynch'ly when
+// the fade is finished -- and not when the ajax loading is finished.
+// So, once the fade is finished, we check to see if the page has
+// finished loading, and if so (the usual case) we fade it in immediately.
+// Otherwise, we show an ajax spinner and poll every 100ms to check
+// for completion of the loading (or an error). Since the polling only
+// happens when loading is already slow, the possibility of an additional
+// <=100ms delay shouldn't make things noticably worse.
+//
 function loadpage(url, name, pushState) {
     var alreadyError = false;
+
+    var loadedHtml = null;
+    var loadError = null;
     $.ajax({
         url: url,
         data: { _ajax: 'yes' },
@@ -45,7 +62,7 @@ function loadpage(url, name, pushState) {
             if (pushState) {
                 history.pushState({ url: url, time: new Date().getTime() }, name, url);
             }
-            $("#contents").fadeOut("normal", function () { $("#contents").html(html); $("#contents").fadeIn("normal"); });
+            loadedHtml = html;
         },
         error: function () {
             if (! alreadyError) {
@@ -53,5 +70,28 @@ function loadpage(url, name, pushState) {
                 alert("There was an error loading the page.");
             }
         }
+    });
+
+    $("#contents").fadeOut("normal", function () {
+        var timeoutId;
+        var spinnerOn = null;
+        function whileNotLoaded() {
+            if (loadedHtml) {
+                clearTimeout(timeoutId);
+                $("#contents").html(loadedHtml).fadeIn("normal");
+            }
+            else if (loadError) {
+                clearTimeout(timeoutId);
+            }
+            else {
+                if (! spinnerOn) {
+                    $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", "background-image": BASE_URI + 'ajax-spinner.gif'}));                
+                }
+            }
+        }
+        if (loadedHtml)
+            $("#contents").html(loadedHtml).fadeIn("normal");
+        else
+            timeoutId = setInterval(whileNotLoaded, 100);
     });
 }
