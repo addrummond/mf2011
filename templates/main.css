@@ -40,6 +40,11 @@ $def radial_gradient(start, end):
     background: $start;
     background: -webkit-gradient(radial, 33% 50%, 0, 33% 50%, 60, from($start), to($end));
     background: -moz-radial-gradient(33% 50%, farthest-side, $start, $end);
+    $# Fall back to a linear gradient in IE.
+    $# For Internet Explorer 5.5 - 7
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr=$('#FF' + start[1:]), endColorStr=$('#FF' + end[1:]), GradientType=1);
+    $# For Internet Explorer 8
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=$('#FF' + start[1:]), endColorstr=$('#FF' + end[1:]), GradientType=1)";
 
 body {
     margin: 0;
