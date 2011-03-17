@@ -3,6 +3,8 @@ import web
 import conf
 import os
 import os.path
+import StringIO
+import urllib
 
 class Opts(object):
     """Wrap a dictionary so we can use the more concise foo.bar syntax to
@@ -54,7 +56,11 @@ render = web.template.render('templates/', globals=tglobs)
 
 def render_wrapper(title, template, js_includes=[]):
     if web.input().get('_ajax'):
-        return template
+        # Bit of a hack -- need to make sure they still get the additional js includes.
+        jss = StringIO.StringIO()
+        for inc in js_includes:
+            jss.write(u'\n<script type="text/javascript" src="%s"></script>\n' % conf.url_for(inc))
+        return jss.getvalue() + unicode(template)
     else:
         return render.wrapper(title, template, js_includes)
 

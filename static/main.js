@@ -63,7 +63,6 @@ function loadpage(request, name, pushState) {
     request.error = function () {
         if (! loadError) {
             loadError = true;
-            alert("There was an error loading the page.");
             $("<div>").html(
                 "<p class='error'>There was an error loading the page.</p>" +
                 "<p><span class='simplemodal-close'>&laquo; back</span></p>"
