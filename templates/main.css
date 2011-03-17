@@ -93,6 +93,7 @@ hr {
     max-width: 20em;
     margin-top: 2em;
     clear: both;
+    text-align: left;
 }
 
 #main hr { margin-left: 0; }
