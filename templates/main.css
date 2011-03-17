@@ -207,7 +207,10 @@ table {
 }
 
 .register td {
-    padding-right: 0.5em;
+    padding-right: 1em;
+}
+.register td.value {
+    font-style: italic;
 }
 
 .btw {

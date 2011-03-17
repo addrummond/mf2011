@@ -5,6 +5,22 @@ import os
 import os.path
 import StringIO
 import urllib
+import fcntl
+
+def lock_and_open(filename, mode):
+    if os.path.exists(filename):
+        f = open(filename, "r") # Open first as read-only.
+        fcntl.flock(f.fileno(), 2)
+        if mode != "r": # If necessary, reopen with the given mode.
+            f.close()
+            f = open(filename, mode)
+        return f
+    else:
+        f = open(filename, mode)
+        return f
+def unlock_and_close(f):
+    fcntl.flock(f.fileno(), 8)
+    f.close()
 
 class Opts(object):
     """Wrap a dictionary so we can use the more concise foo.bar syntax to
@@ -84,21 +100,21 @@ class speakers:
         return render_wrapper('Speakers', render.speakers(map(Opts, speaker_list)))
 
 class register:
+    JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
+
     def GET(self):
-        return render_wrapper('Register', render.register(),
-                              [conf.url_for('/static/register.js'),
-                               conf.url_for('/static/jquery.simplemodal.js')])
+        return render_wrapper('Register', render.register(), register.JS_EXTRAS)
 
     def POST(self):
         data = web.input(friday="no", saturday="no", reception="no", crash="no")
         print data
         for k in ('name', 'aff', 'email'):
-            if not data.has_key(k):
-                web.badrequest()
+            if not data.has_key(k) or not data[k]:
+                return render_wrapper('Register', render.register("You must enter your full name, affiliation and email address."), register.JS_EXTRAS)
 
         f = None
         try:
-            f = open(os.path.join(conf.WORKING_DIR, "registrations"), "a")
+            f = lock_and_open(os.path.join(conf.WORKING_DIR, "registrations"), "a")
             def ersatz(s): return s.replace("%", "%25").replace("\n", "%0a")
             for k in ('name', 'aff', 'email', 'friday', 'saturday', 'reception', 'crash', 'comments'):
                 f.write("%s: %s\n" % (k, data[k] if data.has_key(k) else ''))
@@ -106,7 +122,7 @@ class register:
         except IOError:
             web.internalerror()
         finally:
-            if f: f.close()
+            if f: unlock_and_close(f)
 
         return render_wrapper('Register', render.register_success(Opts(data)))
 
@@ -123,4 +139,5 @@ class maincss:
         web.header("Content-Type", "text/css; charset=utf-8")
         return render.main()
 
-if __name__ == "__main__": app.run()
+if __name__ == "__main__":
+    app.run()

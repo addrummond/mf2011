@@ -1,4 +1,11 @@
+$def with (error=None)
+
 <h3>Register</h3>
+
+$if error:
+    <p class="error">
+    $:error
+    </p>
 
 <form id="register" class="register" action="$url_for('/register')" method="POST" class="registration" onsubmit="return regHandler()">
 <table>
