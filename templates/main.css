@@ -19,6 +19,7 @@ $ LEFT_INDENT_NUDGE = "55px"
 
 $def fromleft_linear_gradient(start, end):
     color: #fff;
+    background: $start;
     $# For WebKit (Safari, Google Chrome etc)
     background: -webkit-gradient(linear, left top, right top, from($start), to($end));
     $# For Mozilla/Gecko (Firefox etc)
@@ -29,12 +30,14 @@ $def fromleft_linear_gradient(start, end):
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=$('#FF' + start[1:]), endColorstr=$('#FF' + end[1:]), GradientType=1)";
 $def fromtop_linear_gradient(start, end):
     color: #fff;
+    background: $start;
     background: -webkit-gradient(linear, left top, left bottom, from($start), to($end));
     background: -moz-linear-gradient(top, $start, $end);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$('#FF' + start[1:]), endColorstr=$('#FF' + end[1:]));
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=$('#FF' + start[1:]), endColorstr=$('#FF' + end[1:]))";
 $def radial_gradient(start, end):
     color: #fff;
+    background: $start;
     background: -webkit-gradient(radial, 33% 50%, 0, 33% 50%, 60, from($start), to($end));
     background: -moz-radial-gradient(33% 50%, farthest-side, $start, $end);
 
