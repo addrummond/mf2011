@@ -12,7 +12,7 @@ $(document).ready(function() {
             return function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-                loadpage(href, name, true);
+                loadpage({type:'GET', url: href}, name, true);
                 return false;
             }
         }
@@ -30,7 +30,7 @@ $(document).ready(function() {
             // so we also ensure that we're not reacting to history entries entered
             // before the page was loaded.
             if (e.originalEvent.state && e.originalEvent.state.time && e.originalEvent.state.time >= baseTime) {
-                loadpage(location.pathname, document.title, false);
+                loadpage({type: 'GET', url: location.pathname }, document.title, false);
             }
         });
     }
@@ -49,28 +49,27 @@ $(document).ready(function() {
 // happens when loading is already slow, the possibility of an additional
 // <=100ms delay shouldn't make things noticably worse.
 //
-function loadpage(url, name, pushState) {
-    var alreadyError = false;
+function loadpage(request, name, pushState) {
+    if (! request.data)
+        request.data = { };
+    request.data._ajax = 'yes';
+    request.dataType = 'html';
+    request.success = function (html) {
+        if (pushState) {
+            history.pushState({ url: request.url, time: new Date().getTime() }, name, request.url);
+        }
+        loadedHtml = html;
+    };
+    request.error = function () {
+        if (! loadError) {
+            loadError = true;
+            alert("There was an error loading the page.");
+        }
+    };
 
     var loadedHtml = null;
     var loadError = null;
-    $.ajax({
-        url: url,
-        data: { _ajax: 'yes' },
-        dataType: 'html',
-        success: function (html) {
-            if (pushState) {
-                history.pushState({ url: url, time: new Date().getTime() }, name, url);
-            }
-            loadedHtml = html;
-        },
-        error: function () {
-            if (! alreadyError) {
-                alreadyError = true;
-                alert("There was an error loading the page.");
-            }
-        }
-    });
+    $.ajax(request);
 
     $("#contents").fadeOut("normal", function () {
         var timeoutId;
@@ -82,6 +81,7 @@ function loadpage(url, name, pushState) {
             }
             else if (loadError) {
                 clearTimeout(timeoutId);
+                $("#contents").fadeIn("normal");
             }
             else {
                 if (! spinnerOn) {

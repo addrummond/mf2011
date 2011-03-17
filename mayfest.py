@@ -85,6 +85,7 @@ class register:
 
     def POST(self):
         data = web.input(friday="no", saturday="no", reception="no", crash="no")
+        print data
         for k in ('name', 'aff', 'email'):
             if not data.has_key(k):
                 web.badrequest()
