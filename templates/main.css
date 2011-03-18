@@ -107,7 +107,7 @@ hr {
 .dateetc {
     clear: both;
     margin: 0;
-    padding: 0 0 0 0;
+    padding: 0.25em 0 0 0;
     text-indent: $LEFT_INDENT_NUDGE;
     width: 100%;
 $#    height: 20px;
