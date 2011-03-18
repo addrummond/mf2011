@@ -1,4 +1,4 @@
-$  TOPGAP = "21px"
+$ TOPGAP = "21px"
 $ TOPBORD = str(int(TOPGAP[:-2]) + 11) + "px"
 
 $ LIGHT_BACKGROUND = "#FFFFFF"
@@ -17,7 +17,7 @@ $ SMALL_FONT_SIZE = "10pt"
 $ LEFT_INDENT = "50px"
 $ LEFT_INDENT_NUDGE = "55px"
 
-$ TOPPAD = "1em"
+$ TOP_PAD = NORMAL_FONT_SIZE
 
 $def fromleft_linear_gradient(start, end):
     color: #fff;
@@ -93,7 +93,7 @@ h1 {
 
 hr {
     font-size: $LARGE_FONT_SIZE;
-    margin: 1em 0 0 0;
+    margin: $LARGE_FONT_SIZE 0 0 0;
     padding: 0;
     border-top: 1px solid $BAND_COLOR;
     border-bottom: none;
@@ -104,29 +104,25 @@ hr {
     text-align: left;
 }
 
-.subtitle {
+.dateetc {
     clear: both;
     margin: 0;
-    padding: 10px 0 10px 0;
-    margin-bottom: $TOPPAD;
-    text-indent: 55px;
+    padding: 0 0 0 0;
+    text-indent: $LEFT_INDENT_NUDGE;
     width: 100%;
-    height: 20px;
+$#    height: 20px;
     background: $fromtop_linear_gradient(DARKER_BACKGROUND, LIGHT_BACKGROUND);
+    color: $MEDIUM_COLOR;
+    font-size: $SMALL_FONT_SIZE;
 }
-.subtitle h2 {
+h2 {
+    clear: both;
     color: $HEADING_COLOR;
     font-size: $NORMAL_FONT_SIZE;
     font-weight: normal;
     font-style: italic;
-    padding-bottom: 0;
-}
-.subtitle div {
     margin: 0;
-    padding: 0;
-    color: $MEDIUM_COLOR;
-    font-weight: normal;
-    font-size: $SMALL_FONT_SIZE;
+    padding: $TOP_PAD 0 $LARGE_FONT_SIZE 0;
 }
 
 h3 {
@@ -135,7 +131,7 @@ h3 {
     clear: both;
     color: $HEADING_COLOR;
     padding: 0;
-    margin: 1em 0 0 0;
+    margin: $NORMAL_FONT_SIZE 0 0 0;
 }
 
 .contact {
@@ -161,9 +157,8 @@ h3 {
 }
 
 .nav {
-    padding: 13px 0 10px 0;
-    margin: 1em 0 $TOPPAD 0;
-    float: left;
+    padding: 0 0 $NORMAL_FONT_SIZE 0;
+    margin: 0;
 }
 .nav li {
     font-size: $SMALL_FONT_SIZE;
