@@ -141,7 +141,6 @@ h3 {
 .contact {
     margin-top: 2em;
     font-size: $SMALL_FONT_SIZE;
-    font-style: italic;
     color: $MEDIUM_COLOR;
     padding-bottom: 2em;
 }
