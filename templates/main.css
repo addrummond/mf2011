@@ -120,10 +120,11 @@ hr {
     font-weight: normal;
     font-style: italic;
     padding-bottom: 0;
-    margin-bottom: 0.5em;
 }
 .subtitle div {
-    color: $HEADING_COLOR;
+    margin: 0;
+    padding: 0;
+    color: $MEDIUM_COLOR;
     font-weight: normal;
     font-size: $SMALL_FONT_SIZE;
 }
