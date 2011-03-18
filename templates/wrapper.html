@@ -2,14 +2,14 @@ $def with (subtitle, contents, includes=[])
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link href="$url_for('/main.css')" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 /* <![CDATA[ */ BASE_URI="$url_for('')" /* ]]> */
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script src="$url_for('/static/main.js')"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="$url_for('/static/main.js')"></script>
 $for inc in includes:
     $if inc.endswith('.js'):
         <script type="text/javascript" src="$inc"></script>
@@ -23,7 +23,10 @@ $for inc in includes:
 <h1>Mayfest 2011</h1>
 <div class="post"></div>
 
-<h2><span style="vertical-align: bottom">Pronouns: Reference and Representation</span></h2>
+<div class="subtitle">
+<h2>Pronouns: Reference and Representation</h2>
+<div>May 6-7, Maryland Room, Marie Mount Hall, University of Maryland: College Park</div>
+</div>
 
 <div id="main">
 <ul class="nav">
@@ -41,8 +44,6 @@ $for inc in includes:
 $:contents
 </div>
 
-</div>
-
 <hr/>
 <div class="contact">
 <p>
@@ -52,6 +53,8 @@ Committee: Dustin Alfonso Chacón, <a href="http://ling.umd.edu/~alexd">Alex Dru
 <a href="mailto:mayfest2011umd@gmail.com">mayfest2011umd@gmail.com</a>
 </p>
 </div>
+
+</div>$# End of #main.
 
 </body>
 </html>

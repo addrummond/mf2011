@@ -1,4 +1,4 @@
-$ TOPGAP = "21px"
+$  TOPGAP = "21px"
 $ TOPBORD = str(int(TOPGAP[:-2]) + 11) + "px"
 
 $ LIGHT_BACKGROUND = "#FFFFFF"
@@ -9,13 +9,15 @@ $ LIGHT_COLOR = "#6E79AE"
 $ H_MEDIUM_COLOR = "#10193E"
 $ H_LIGHT_COLOR = "#2D3147"
 $ BAND_COLOR = "#C4A787"
-
+ 
 $ LARGE_FONT_SIZE = "16pt"
 $ NORMAL_FONT_SIZE = "12pt"
 $ SMALL_FONT_SIZE = "10pt"
 
 $ LEFT_INDENT = "50px"
 $ LEFT_INDENT_NUDGE = "55px"
+
+$ TOPPAD = "1em"
 
 $def fromleft_linear_gradient(start, end):
     color: #fff;
@@ -90,31 +92,40 @@ h1 {
 }
 
 hr {
-    margin-left: $LEFT_INDENT_NUDGE;
+    font-size: $LARGE_FONT_SIZE;
+    margin: 1em 0 0 0;
+    padding: 0;
     border-top: 1px solid $BAND_COLOR;
     border-bottom: none;
     border-left: none;
     border-right: none;
     max-width: 20em;
-    margin-top: 2em;
     clear: both;
     text-align: left;
 }
 
-#main hr { margin-left: 0; }
-
-h2 {
+.subtitle {
+    clear: both;
     margin: 0;
-    padding: 10px 0 0 0;
+    padding: 10px 0 10px 0;
+    margin-bottom: $TOPPAD;
     text-indent: 55px;
     width: 100%;
     height: 20px;
     background: $fromtop_linear_gradient(DARKER_BACKGROUND, LIGHT_BACKGROUND);
+}
+.subtitle h2 {
     color: $HEADING_COLOR;
-    font-weight: normal;
     font-size: $NORMAL_FONT_SIZE;
     font-weight: normal;
     font-style: italic;
+    padding-bottom: 0;
+    margin-bottom: 0.5em;
+}
+.subtitle div {
+    color: $HEADING_COLOR;
+    font-weight: normal;
+    font-size: $SMALL_FONT_SIZE;
 }
 
 h3 {
@@ -127,10 +138,11 @@ h3 {
 }
 
 .contact {
-    margin-left: $LEFT_INDENT_NUDGE;
+    margin-top: 2em;
     font-size: $SMALL_FONT_SIZE;
     font-style: italic;
     color: $MEDIUM_COLOR;
+    padding-bottom: 2em;
 }
 .contact a {
     color: $MEDIUM_COLOR;
@@ -143,10 +155,14 @@ h3 {
 .contact a:visited {
     color: $MEDIUM_COLOR;
 }
+.contact p {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+}
 
 .nav {
-    padding: 13px 0 0 0;
-    margin: 1em 0 2em 0;
+    padding: 13px 0 10px 0;
+    margin: 1em 0 $TOPPAD 0;
     float: left;
 }
 .nav li {
