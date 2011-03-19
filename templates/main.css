@@ -74,7 +74,7 @@ h1 {
     padding: 0;
     background-image: url('$url_for('/static/mf2011logo.png')');
     background-repeat: no-repeat;
-    width: 415px;
+    width: 416px;
     display: block;
     height: 54px;
     text-indent: -9999px;
