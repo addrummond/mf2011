@@ -7,7 +7,7 @@ use POSIX qw( ceil );
 
 sub rgb { return (shift() / 255, shift() / 255, shift() / 255); }
 
-my @FONT = ($ARGV[0] || "Trebuchet MS", "normal", "normal");
+my @FONT = ($ARGV[0] || "Museo Sans", "normal", "normal");
 my $FONT_SIZE = 60;
 
 my @DARK = rgb(48,56,94);

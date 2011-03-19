@@ -1,3 +1,6 @@
+$ FONT_FAMILY = "'Museo Sans', Verdana, Helvetica, Arial, sans-serif"
+$ FONT_FAMILY_ITALIC = "'Museo Sans Italic', Verdana, Helvetica, Arial, sans-serif"
+
 $ TOPGAP = "21px"
 $ TOPBORD = str(int(TOPGAP[:-2]) + 11) + "px"
 
@@ -46,11 +49,23 @@ $def radial_gradient(start, end):
     $# For Internet Explorer 8
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=$('#FF' + start[1:]), endColorstr=$('#FF' + end[1:]), GradientType=1)";
 
+@font-face {
+    font-family: 'Museo Sans';
+    src: local('Museo Sans'),
+    url('$url_for('/static/MuseoSans_500.otf')') format('opentype');
+}
+@font-face {
+    font-family: 'Museo Sans Italic';
+    font-style: italic;
+    src: local('Museo Sans Italic'),
+    url('$url_for('/static/MuseoSans_500_Italic.otf')') format('opentype');
+}
+
 body {
     margin: 0;
     padding: 0;
     background: $LIGHT_BACKGROUND;
-    font-family: Verdana, Helvetica, sans-serif;
+    font-family: $FONT_FAMILY;
 }
 
 h1 {
@@ -59,9 +74,9 @@ h1 {
     padding: 0;
     background-image: url('$url_for('/static/mf2011logo.png')');
     background-repeat: no-repeat;
-    width: 385px;
+    width: 415px;
     display: block;
-    height: 55px;
+    height: 54px;
     text-indent: -9999px;
     border-top: $TOPGAP solid $DARKER_BACKGROUND;
 }
@@ -119,6 +134,7 @@ h2 {
     font-size: $NORMAL_FONT_SIZE;
     font-weight: normal;
     font-style: italic;
+    font-family: $FONT_FAMILY_ITALIC;
     margin: 0;
     padding: 0 0 $LARGE_FONT_SIZE 0;
 }
@@ -220,12 +236,14 @@ table {
 }
 .register td.value {
     font-style: italic;
+    font-family: $FONT_FAMILY_ITALIC;
 }
 
 .btw {
     font-size: $SMALL_FONT_SIZE;
     font-weight: normal;
     font-style: italic;
+    font-family: $FONT_FAMILY_ITALIC;
 }
 
 .parking {
