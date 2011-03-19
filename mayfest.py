@@ -70,7 +70,12 @@ urls = (
 
 app = web.application(urls, globals())
 
-tglobs = dict(int=int, str=str, url_for=conf.url_for, websafe=web.websafe)
+tglobs = dict(
+    int=int,
+    str=str,
+    url_for=conf.url_for,
+    websafe=web.websafe
+)
 render = web.template.render(os.path.join(BASE, 'templates/'), globals=tglobs)
 
 def render_wrapper(title, template, js_includes=[]):
@@ -79,7 +84,7 @@ def render_wrapper(title, template, js_includes=[]):
         jss = StringIO.StringIO()
         for inc in js_includes:
             jss.write(u'\n<script type="text/javascript" src="%s"></script>\n' % inc)
-        return jss.getvalue() + unicode(template)
+        return title + "\n" + jss.getvalue() + unicode(template)
     else:
         return render.wrapper(title, template, js_includes)
 

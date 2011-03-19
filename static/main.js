@@ -74,13 +74,22 @@ function loadpage(request, name, pushState) {
     var loadError = null;
     $.ajax(request);
 
+    function displayHtml(html)
+    {
+        var m = html.match(/^([^\n]*)/);
+        var title = m[1];
+        var m2 = document.title.match(/^([^-]+)/);
+        document.title = title.match(/^\s*$/) ? m2[1] : m2[1] + " - " + title;
+        $("#contents").html(html.substr(title.length + 1)).fadeIn("normal");
+    }
+
     $("#contents").fadeOut("normal", function () {
         var timeoutId;
         var spinnerOn = null;
         function whileNotLoaded() {
             if (loadedHtml) {
                 clearTimeout(timeoutId);
-                $("#contents").html(loadedHtml).fadeIn("normal");
+                displayHtml(loadedHtml);
             }
             else if (loadError) {
                 clearTimeout(timeoutId);
@@ -93,7 +102,7 @@ function loadpage(request, name, pushState) {
             }
         }
         if (loadedHtml) {
-            $("#contents").html(loadedHtml).fadeIn("normal");
+            displayHtml(loadedHtml);
         }
         else
             timeoutId = setInterval(whileNotLoaded, 100);
