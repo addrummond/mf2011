@@ -97,7 +97,7 @@ function loadpage(request, name, pushState) {
             }
             else {
                 if (! spinnerOn) {
-                    $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", "background-image": BASE_URI + 'static/ajax-spinner.gif'}));                
+                    $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", "background-image": BASE_URI + 'static/ajax-loader.gif'}));                
                 }
             }
         }
