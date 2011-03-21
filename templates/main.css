@@ -345,3 +345,15 @@ $#}
     font-weight: bold;
     color: red;
 }
+
+ul.hotels p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+ul.hotels li p + p {
+    font-family: $FONT_FAMILY_ITALIC;
+    font-style: italic;
+    font-size: small;
+}
