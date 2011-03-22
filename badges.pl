@@ -116,7 +116,7 @@ sub draw_badge {
                 TITLE,
                 pt_to_in($badge_width_in_pts-$logo_portion_pts) - BADGE_RIGHT_MARGIN,
                 BADGE_HEIGHT,
-                0.1
+                pt_to_in(2)
             )
         );
         my $logo_vportion = pt_to_in($logo_surface->get_height() / $scale_factor);
