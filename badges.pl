@@ -27,10 +27,14 @@ use constant {
 
     TITLE => "Mayfest 2011",
 
+    SPACING_BELOW_TITLE => 0.25,
+    NAME_RIGHT_NUDGE => 0.02,
+
     TITLE_MAX_FONT_SIZE => 50,
     NAME_MAX_FONT_SIZE => 25,
 };
 use constant TITLE_COLOR => (0, 0, 0);
+use constant NAME_COLOR => (0, 0, 0);
 use constant FONT => ("Museo Sans", "normal", "normal");
 
 sub in_to_pt { return shift() * PTS_IN_ONE_IN }
@@ -67,12 +71,13 @@ sub get_best_font_size_ {
     my $e = $cr->text_extents($text);
     my $xdiff = $maxw - $e->{width};
     my $ydiff = $maxh - $e->{height};
-#    print #"$upper, $lower : $size, ", in_to_pt($size),
+#    print "S: $size, ", in_to_pt($size),
 #          ", $xdiff, $ydiff\n";
     if ($xdiff >= 0 && $ydiff >= 0 && min($xdiff, $ydiff) <= $epsilon) {
         return $size;
     }
     elsif ($xdiff > 0 && $ydiff > 0) { # Too small.
+        return $size if $size == $upper;
         get_best_font_size_($count+1 , $upper, $size, ($size + $upper)/2, $text, $maxw, $maxh, $epsilon);
     }
     else { # Too big.
@@ -115,7 +120,7 @@ sub draw_badge {
                 pt_to_in(TITLE_MAX_FONT_SIZE),
                 TITLE,
                 pt_to_in($badge_width_in_pts-$logo_portion_pts) - BADGE_RIGHT_MARGIN,
-                BADGE_HEIGHT,
+                BADGE_HEIGHT, # Doesn't matter what we give here since width is the real constraint.
                 pt_to_in(2)
             )
         );
@@ -127,7 +132,22 @@ sub draw_badge {
         $cr->fill();
 
         # Draw person's name.
-        
+        $cr->select_font_face(FONT);
+        $cr->set_font_size(
+            get_best_font_size(
+                pt_to_in(NAME_MAX_FONT_SIZE),
+                $info->{name},
+                BADGE_WIDTH - BADGE_LEFT_MARGIN - BADGE_RIGHT_MARGIN,
+                BADGE_HEIGHT, # Doesn't matter what we give here since width is the real constraint.
+                pt_to_in(2)
+            )
+        );
+        my $name_extents = $cr->text_extents($info->{name});
+        $cr->move_to(NAME_RIGHT_NUDGE + ((BADGE_WIDTH - BADGE_LEFT_MARGIN - BADGE_RIGHT_MARGIN - $name_extents->{width}) / 2),
+                     $logo_vportion + SPACING_BELOW_TITLE - $name_extents->{y_bearing});
+        $cr->text_path($info->{name});
+        $cr->set_source_rgb(NAME_COLOR);
+        $cr->fill();
     } $cr, Cairo::Matrix->init(1, 0, 0, 1, $x + BADGE_LEFT_MARGIN, $y + BADGE_TOP_MARGIN)
            ->multiply(Cairo::Matrix->init(in_to_pt(1), 0, 0, in_to_pt(1), 1, 1));
 }
@@ -156,5 +176,8 @@ draw_badges([
     },
     { name => "Collin Phillips",
       institution => "University of Maryland"
+    },
+    { name => "Sir Person Bearing a Very Long Name",
+      institution => "Prolixity Institute"
     }
 ])
