@@ -164,26 +164,25 @@ sub draw_badge {
         $cr->set_font_size(
             get_best_font_size(
                 pt_to_in(INSTITUTION_MAX_FONT_SIZE),
-                $info->{institution},
+                $info->{aff},
                 BADGE_WIDTH - BADGE_LEFT_MARGIN - BADGE_RIGHT_MARGIN,
                 BADGE_HEIGHT, # Doesn't matter what we give here since width is the real constraint.
                 pt_to_in(FONT_SIZE_EPSILON)
             )
         );
-        my $inst_extents = $cr->text_extents($info->{institution});
+        my $inst_extents = $cr->text_extents($info->{aff});
         $cr->move_to(BADGE_LEFT_MARGIN + INSTITUTION_RIGHT_NUDGE + ((BADGE_WIDTH - BADGE_LEFT_MARGIN - BADGE_RIGHT_MARGIN - $inst_extents->{width}) / 2),
                      $name_y + SPACING_BELOW_NAME - $inst_extents->{y_bearing});
-        $cr->text_path($info->{institution});
+        $cr->text_path($info->{aff});
         $cr->set_source_rgb(INSTITUTION_COLOR);
         $cr->fill();
     } $cr, Cairo::Matrix->init(1, 0, 0, 1, $x + BADGE_LEFT_MARGIN, $y + BADGE_TOP_MARGIN)
            ->multiply(Cairo::Matrix->init(in_to_pt(1), 0, 0, in_to_pt(1), 1, 1));
 }
 
-sub draw_badges {
-    my $badges = shift;
+sub draw_one_page_of_badges {
+    my ($badges, $i) = @_;
 
-    my $i = 0;
     for (my $x = PAGE_LEFT_MARGIN;
          $x + BADGE_WIDTH <= PAGE_WIDTH - PAGE_RIGHT_MARGIN;
          $x += BADGE_WIDTH + BADGE_H_SPACING) {
@@ -197,15 +196,69 @@ sub draw_badges {
     return $i;
 }
 
-# TEST
-draw_badges([
-    { name => "Brian Dillon",
-      institution => "University of Maryland"
-    },
-    { name => "Collin Phillips",
-      institution => "University of Maryland"
-    },
-    { name => "Sir Person Bearing a Very Long Name Indeed",
-      institution => "Prolixity Institute"
+sub draw_badges {
+    my $badges = shift;
+
+    for (my $i = 0; $i < scalar(@$badges); $i = draw_one_page_of_badges($badges, $i)) {
+        $cr->show_page() if $i > 0;
     }
-])
+}
+
+# Parse 'registrations' file.
+use constant REQUIRED_KEYS => qw( name aff email friday saturday reception crash ); # 'comments' not required.
+open my $regs, "registrations" or die "Unable to open 'registrations' file.";
+my $state = 'initial';
+my @records;
+my $current_record = { };
+for my $line (<$regs>) {
+    if ($state eq 'initial') {
+        if ($line =~ /^\s*$/) {
+            ;
+        }
+        elsif ($line =~ /^\s*--\s*$/) {
+            $state = 'date';
+        }
+        else { die "Error parsing 'records'."; }
+    }
+    elsif ($state eq 'date') {
+        if ($line !~ /^\s*(?:(?:Mon)|(?:Tue)|(?:Wed)|(?:Thu)|(?:Fri))\s+(?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))\s+\d{1,2} \d\d:\d\d:\d\d\s+\d\d\d\d\s*$/) {
+            die "Bad date ('$line')";
+        }
+        else { $state = 'in_record'; }
+    }
+    elsif ($state eq 'in_record') {
+        if ($line =~ /^\s*$/) {
+            push @records, $current_record;
+            $current_record = { };
+            $state = 'initial';
+        }
+        elsif ($line =~ /^\s*([\w\s]+):\s*(.*)$/) {
+            $current_record->{$1} = $2;
+        }
+        else {
+            die "Error parsing 'records'.";
+        }
+    }
+    else { die "Bad state."; }
+}
+push @records, $current_record if scalar(%$current_record);
+foreach my $r (@records) {
+    for my $k (REQUIRED_KEYS) {
+        die "Required key missing ('$k')" unless $r->{$k};
+    }
+}
+
+draw_badges(\@records);
+
+# TEST
+# draw_badges([
+#     { name => "Brian Dillon",
+#       institution => "University of Maryland"
+#     },
+#     { name => "Collin Phillips",
+#       institution => "University of Maryland"
+#     },
+#     { name => "Sir Person Bearing a Very Long Name Indeed",
+#       institution => "Prolixity Institute"
+#     }
+# ])
