@@ -105,10 +105,10 @@ function loadpage(request, name, pushState) {
             contactInfo.fadeIn("normal");
         }
         else {
-              $("#contents")
-              .empty()
-              .append(spinnerOn = $("<div>").addClass("loader"))
-              .show();
+            $("#contents")
+            .empty()
+            .append(spinnerOn = $("<div>").addClass("loader"))
+            .show();
             timeoutId = setInterval(whileNotLoaded, 100);
         }
     });
