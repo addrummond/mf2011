@@ -85,7 +85,6 @@ function loadpage(request, name, pushState) {
 
     $("#contents").fadeOut("normal", function () {
         var timeoutId;
-        var spinnerOn = null;
         function whileNotLoaded() {
             if (loadedHtml) {
                 clearTimeout(timeoutId);
@@ -95,16 +94,13 @@ function loadpage(request, name, pushState) {
                 clearTimeout(timeoutId);
                 $("#contents").fadeIn("normal");
             }
-            else {
-                if (! spinnerOn) {
-                    $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", "background-image": BASE_URI + 'static/ajax-loader.gif'}));                
-                }
-            }
         }
         if (loadedHtml) {
             displayHtml(loadedHtml);
         }
-        else
+        else {
+            $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", backgroundImage: BASE_URI + 'static/ajax-loader.gif'}));  
             timeoutId = setInterval(whileNotLoaded, 100);
+        }
     });
 }
