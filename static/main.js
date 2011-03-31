@@ -83,6 +83,10 @@ function loadpage(request, name, pushState) {
         $("#contents").html(html.substr(title.length + 1)).fadeIn("normal");
     }
 
+    var bottomHr = $("#contents + hr");
+    var contactInfo = $(".contact");
+    bottomHr.fadeOut("normal");
+    contactInfo.fadeOut("normal");
     $("#contents").fadeOut("normal", function () {
         var timeoutId;
         function whileNotLoaded() {
@@ -97,9 +101,14 @@ function loadpage(request, name, pushState) {
         }
         if (loadedHtml) {
             displayHtml(loadedHtml);
+            bottomHr.fadeIn("normal");
+            contactInfo.fadeIn("normal");
         }
         else {
-            $("#contents").empty().append(spinnerOn = $("<div>").css({ width: "16px", height: "16px", backgroundImage: BASE_URI + 'static/ajax-loader.gif'}));  
+              $("#contents")
+              .empty()
+              .append(spinnerOn = $("<div>").addClass("loader"))
+              .show();
             timeoutId = setInterval(whileNotLoaded, 100);
         }
     });

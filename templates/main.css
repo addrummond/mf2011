@@ -357,3 +357,10 @@ ul.hotels li p + p {
     font-style: italic;
     font-size: small;
 }
+
+.loader {
+    width: 16px;
+    height: 16px;
+    background-image: url('$url_for('/static/ajax-loader.gif')');
+    margin-top: $NORMAL_FONT_SIZE;
+}
