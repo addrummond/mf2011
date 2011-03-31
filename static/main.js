@@ -93,6 +93,8 @@ function loadpage(request, name, pushState) {
             if (loadedHtml) {
                 clearTimeout(timeoutId);
                 displayHtml(loadedHtml);
+                bottomHr.fadeIn("normal");
+                contactInfo.fadeIn("normal");
             }
             else if (loadError) {
                 clearTimeout(timeoutId);
