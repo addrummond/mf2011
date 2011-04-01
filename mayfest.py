@@ -26,39 +26,6 @@ def unlock_and_close(f):
     fcntl.flock(f.fileno(), 8)
     f.close()
 
-class Opts(object):
-    """Wrap a dictionary so we can use the more concise foo.bar syntax to
-       access options in templates. It's convenient to have __getattr__
-       return the empty list as the default value for a key that isn't set,
-       since this simplifies looping code in templates. The trade off is that
-       we then need to special case display of the empty list as display of
-       the empty string.
-    """
-    class ListWhereEmptyDisplaysAsEmptyString(list):
-        def __init__(self, *args):
-            super(list, self).__init__(*args)
-
-        def __unicode__(self):
-            if len(self) == 0:
-                return u""
-            else:
-                raise Exception("Should not get here!")
-
-        def __str__(self):
-            raise Exception("NOT USING UNICODE!!!")
-
-    def __init__(self, d):
-       self.d = d
-
-    def __getattr__(self, k):
-        try:
-            return self.d[k]
-        except KeyError:
-            return Opts.ListWhereEmptyDisplaysAsEmptyString()
-
-    def update(self, opts):
-        self.__dict__.update(opts.__dict__)
-
 urls = (
     '/', 'index',
     '/schedule', 'schedule',
@@ -116,7 +83,7 @@ with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
             speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
 class speakers:
     def GET(self):
-        return render_wrapper('Speakers', render.speakers(map(Opts, speaker_list)))
+        return render_wrapper('Speakers', render.speakers(speaker_list))
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
@@ -140,7 +107,6 @@ with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
                 assert len(s) == 1
                 event['abstractfile'] = s[0]['abstractfile']
                 event_list.append(event)
-        
 class schedule:
     def GET(self):
         return render_wrapper('Schedule', render.schedule())
@@ -170,7 +136,7 @@ class register:
         finally:
             if f: unlock_and_close(f)
 
-        return render_wrapper('Register', render.register_success(Opts(data)))
+        return render_wrapper('Register', render.register_success(data))
 
 class directions:
     def GET(self):

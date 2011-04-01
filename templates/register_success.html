@@ -6,36 +6,36 @@ Thank you for registering. You gave the following details:
 </p>
 <table class="register">
 <tr>
-<td>Full name</td><td class="value">$reg.name</td>
+<td>Full name</td><td class="value">$reg['name']</td>
 </tr>
 <tr>
-<td>Affiliation</td><td class="value">$reg.aff</td>
+<td>Affiliation</td><td class="value">$reg['aff']</td>
 </tr>
 <tr>
-<td>Email address</td><td class="value">$reg.email</td>
+<td>Email address</td><td class="value">$reg['email']</td>
 </tr>
 </table>
 <p>
 You are
-$if reg.friday == "no":
+$if reg['friday'] == "no":
     <b>not</b>
 attending the sessions on Friday 5/6.
 </p>
 <p>
 You are
-$if reg.saturday == "no":
+$if reg['saturday'] == "no":
     <b>not</b>
 attending the sessions on Saturday 5/7.
 </p>
 <p>
 You are
-$if reg.reception == "no":
+$if reg['reception'] == "no":
     <b>not</b>
 attending the Mayfest dinner/party on Friday evening (5:30pm).
 </p>
 <p>
 You
-$if reg.crash != "no":
+$if reg['crash'] != "no":
     requested
 $else:
     did <b>not</b> request

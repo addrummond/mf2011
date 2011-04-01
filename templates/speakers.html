@@ -4,13 +4,13 @@ $def with (speaker_list)
 <ul>
 $def speaker(info):
     <li>
-    $if info.homepage:
-        <a href="$info.homepage">
-    $:(websafe(info.name) + ('</a>,' if info.homepage else ','))
-    $info.institution
+    $if info['homepage']:
+        <a href="$info['homepage']">
+    $:(websafe(info['name']) + ('</a>,' if info['homepage'] else ','))
+    $info['institution']
     </li>
-    $if info.abstractfile:
-        <a href="$url_for('/static/' + info.abstractfile)">[abstract]</a>
+    $if info['abstractfile']:
+        <a href="$url_for('/static/' + info['abstractfile'])">[abstract]</a>
 $for s in speaker_list:
     $:speaker(s)
 </ul>
