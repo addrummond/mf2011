@@ -46,7 +46,7 @@ def my_strftime(dt, format_string):
         .replace("%Y", "%04i" % dt.year) \
         .replace("%m", str(dt.month)) \
         .replace("%d", str(dt.day)) \
-        .replace("%A", "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()[dt.day-1]) \
+        .replace("%A", ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')[dt.day-1]) \
         .replace("%H", str(dt.hour)) \
         .replace("%I", str(dt.hour) if dt.hour <= 12 else str(dt.hour-12)) \
         .replace("%M", "%02i" % dt.minute)

@@ -93,7 +93,6 @@ h1 {
 
 .post {
     width: 100%;
-    font-weight: bold;
     color: $LIGHT_BACKGROUND;
     margin: 0;
     padding: 0;
@@ -331,7 +330,6 @@ $#    vertical-align: middle;
 $#}
 .simplemodal-close {
     text-decoration: none;
-    font-weight: bold;
     cursor: pointer;
 }
 .simplemodal-close:hover {
@@ -342,7 +340,6 @@ $#}
 }
 
 .error {
-    font-weight: bold;
     color: red;
 }
 
