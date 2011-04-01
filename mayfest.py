@@ -40,11 +40,23 @@ urls = (
 
 app = web.application(urls, globals())
 
+def my_strftime(dt, format_string):
+    return \
+        format_string \
+        .replace("%Y", "%04i" % dt.year) \
+        .replace("%m", str(dt.month)) \
+        .replace("%d", str(dt.day)) \
+        .replace("%A", "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()[dt.day-1]) \
+        .replace("%H", str(dt.hour)) \
+        .replace("%I", str(dt.hour) if dt.hour <= 12 else str(dt.hour-12)) \
+        .replace("%M", "%02i" % dt.minute)
+
 tglobs = dict(
     int=int,
     str=str,
     url_for=conf.url_for,
-    websafe=web.websafe
+    websafe=web.websafe,
+    my_strftime=my_strftime
 )
 render = web.template.render(os.path.join(BASE, 'templates/'), globals=tglobs)
 
@@ -89,17 +101,19 @@ class speakers:
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
+blank_regex = re.compile(r"^\s*$")
 event_list = []
 with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
     for l in schedule_f:
         if not is_blank_or_comment(l):
             fields = split_ssv_line(l)
-            assert len(fields) == 4
+            assert len(fields) == 3
             event = { }
             try:
                 iso8601 = "%Y-%m-%dT%H:%M"
                 event['start_datetime'] = datetime.datetime(*time.strptime(fields[0], iso8601)[:5])
-                event['end_datetime'] = datetime.datetime(*time.strptime(event['start_datetime'].strftime("%Y-%m-%dT" + fields[1]), iso8601)[:5])
+                if not re.match(blank_regex, fields[1]):
+                    event['end_datetime'] = datetime.datetime(*time.strptime(event['start_datetime'].strftime("%Y-%m-%dT" + fields[1]), iso8601)[:5])
             except ValueError, e:
                 raise Exception("Error parsing date/time in schedule.txt: use ISO 8601 format (see e.g. Wikipedia article) (%s)." % str(e))
             info = fields[2]
@@ -115,7 +129,7 @@ with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
             else:
                 event['info'] = info
             event_list.append(event)
-event_list.sort(key=lambda event: event['start_datetime'])
+event_list.sort(key=lambda event: (event['start_datetime'], event.get('end_datetime', datetime.datetime(1, 1, 1, 1, 1))))
 # Group events by day (makes table rendering logic simpler in template).
 event_list_by_days = list(itertools.imap(lambda x: list(x[1]),
     itertools.groupby(event_list, lambda e: (e['start_datetime'].year,

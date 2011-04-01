@@ -1,3 +1,32 @@
-2011-05-08T08:30;09:00;Breakfast & Welcome;
-2011-05-08T09:00;10:00;[Howard Lasnik] Some stuff;
-2011-05-08T10:00;10:15;Break;
+#
+# Friday
+#
+2011-05-06T08:30;09:00;Breakfast & Welcome
+2011-05-06T09:00;;Session 1
+2011-05-06T09:00;10:00;[Howard Lasnik]: Overview of pronouns
+2011-05-06T10:00;10:15;Break
+2011-05-06T10:15;11:15;[Ken Safir]
+2011-05-06T11:15;12:15;[Eric Reuland]
+2011-05-06T12:15;14:00;Lunch
+2011-05-06T14:00;;Session 2
+2011-05-06T14:00;15:00;[Petra Hendriks]
+2011-05-06T15:00;16:00;[Stephani Foraker]
+2011-05-06T16:00;16:30;Discussion
+2011-05-06T18:00;;Party
+2011-05-06T18:00;21:00;From 6:00 onwards there will be dinner and a party chez Collin Phillips and Andrea Zukowski.
+
+#
+# Saturday
+#
+2011-05-07T08:30;9:00;Breakfast
+2011-05-07T09:00;;Session 3
+2011-05-07T09:00;10:00;[Jeanette Gundel]
+2011-05-07T10:00;10:15;Break
+2011-05-07T10:15;11:15;[Jeff Runner]
+2011-05-07T11:15;12:15;[Paul Elbourne]
+2011-05-07T12:15;14:00;Lunch
+2011-05-07T14:00;;Session 4
+2011-05-07T14:00;15:00;[Angelika Kratzer]
+2011-05-07T15:00;16:00;[Ash Asudeh]
+2011-05-07T16:00;17:00;Discussion
+2011-05-07T17:00;17:05;Closing remarks

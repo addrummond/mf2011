@@ -364,3 +364,34 @@ ul.hotels li p + p {
     background-image: url('$url_for('/static/ajax-loader.gif')');
     margin-top: $NORMAL_FONT_SIZE;
 }
+
+table.schedule td {
+    padding-bottom: 0.25em;
+    padding-right: 0.25em;
+}
+table.schedule tr:last-child td {
+    padding-bottom: 0;
+}
+table.schedule th {
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    color: $HEADING_COLOR;
+}
+table.schedule tr:first-child th {
+    padding-top: 0;
+}
+table.schedule td[colspan="2"] {
+    font-size: $SMALL_FONT_SIZE;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: $NORMAL_FONT_SIZE;
+    color: $HEADING_COLOR;
+}
+table.schedule td.info {
+    max-width: 25em;
+    padding-left: $NORMAL_FONT_SIZE;
+    padding-right: $NORMAL_FONT_SIZE;    
+}
