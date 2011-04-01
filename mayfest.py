@@ -9,6 +9,7 @@ import StringIO
 import urllib
 import fcntl
 import time
+import datetime
 import re
 
 def lock_and_open(filename, mode):
@@ -92,21 +93,24 @@ with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
     for l in schedule_f:
         if not is_blank_or_comment(l):
             fields = split_ssv_line(l)
-            assert len(fields) == 3
+            assert len(fields) == 4
             event = { }
             try:
-                event['datetime'] = time.strptime(fields[0], "%Y-%m-%dT%H:%M") # ISO 8601
+                iso8601 = "%Y-%m-%dT%H:%M"
+                event['start_datetime'] = time.strptime(fields[0], iso8601)
+                event['end_datetime'] = time.strptime(datetime.datetime(*event['start_datetime'][:5]).strftime("%Y-%m-%dT" + fields[1]), iso8601)
             except ValueError, e:
                 raise Exception("Error parsing date/time in schedule CSV file: use ISO 8601 format (see e.g. Wikipedia article) (%s)." % str(e))
-            info = fields[1]
+            info = fields[2]
             m = re.match(speaker_regex, info)
             if m:
                 event['speaker'] = m.group(1).rstrip(' ')
                 event['info'] = m.group(2)
                 s = [s for s in speaker_list if s['name'] == m.group(1)]
-                assert len(s) == 1
+                if len(s) < 1:
+                    raise Exception("Unknown speaker referenced in schedule.txt: '%s'" % m.group(1))
                 event['abstractfile'] = s[0]['abstractfile']
-                event_list.append(event)
+            event_list.append(event)
 class schedule:
     def GET(self):
         return render_wrapper('Schedule', render.schedule())
