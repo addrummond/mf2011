@@ -9,6 +9,7 @@ import StringIO
 import urllib
 import fcntl
 import time
+import re
 
 def lock_and_open(filename, mode):
     if os.path.exists(filename):
@@ -91,21 +92,58 @@ def render_wrapper(title, template, js_includes=[]):
 class index:
     def GET(self):
         return render_wrapper('', render.index())
-class schedule:
-    def GET(self):
-        return render_wrapper('Schedule', render.schedule())
+
+# Splits a line in a semicolon-separated value file in which semicolons
+# may be escaped by '\'.
+ssv_regex = re.compile(r";((?:(?:\\;)|[^\\;])*)")
+def split_ssv_line(line):
+    r = re.findall(ssv_regex, ';' + line.rstrip('\r\n')) # Note that strip interprets the string
+                                                         # as a list of chars, so this /will/ strip
+                                                         # UNIX line endings as well as Windows.
+    return r
+
+blank_or_comment_regex = re.compile(r"^\s*(?:#.*)|(?:\s*)$")
+def is_blank_or_comment(line):
+    return re.match(blank_or_comment_regex, line)
 
 # Read speakers CSV db.
-speakers_f = open(os.path.join(conf.WORKING_DIR, "speakers.txt"))
 speaker_list = []
-for l in speakers_f:
-    l = l.rstrip('\n')
-    fields = l.split(';')
-    assert len(fields) == 4
-    speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
+with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
+    for l in speakers_f:
+        if not is_blank_or_comment(l):
+            fields = split_ssv_line(l)
+            assert len(fields) == 4
+            speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
 class speakers:
     def GET(self):
         return render_wrapper('Speakers', render.speakers(map(Opts, speaker_list)))
+
+# Read schedule CSV db.
+speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
+event_list = []
+with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
+    for l in schedule_f:
+        if not is_blank_or_comment(l):
+            fields = split_ssv_line(l)
+            assert len(fields) == 3
+            event = { }
+            try:
+                event['datetime'] = time.strptime(fields[0], "%Y-%m-%dT%H:%M") # ISO 8601
+            except ValueError, e:
+                raise Exception("Error parsing date/time in schedule CSV file: use ISO 8601 format (see e.g. Wikipedia article) (%s)." % str(e))
+            info = fields[1]
+            m = re.match(speaker_regex, info)
+            if m:
+                event['speaker'] = m.group(1).rstrip(' ')
+                event['info'] = m.group(2)
+                s = [s for s in speaker_list if s['name'] == m.group(1)]
+                assert len(s) == 1
+                event['abstractfile'] = s[0]['abstractfile']
+                event_list.append(event)
+        
+class schedule:
+    def GET(self):
+        return render_wrapper('Schedule', render.schedule())
 
 class register:
     JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
