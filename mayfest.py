@@ -30,12 +30,12 @@ def unlock_and_close(f):
 
 urls = (
     '/', 'index',
-    '/schedule', 'schedule',
-    '/speakers', 'speakers',
-    '/register', 'register',
-    '/directions', 'directions',
-    '/accommodation', 'accommodation',
-    '/main.css', 'maincss'
+    '/schedule', 'Schedule',
+    '/speakers', 'Speakers',
+    '/register', 'Register',
+    '/directions', 'Directions',
+    '/accommodation', 'Accommodation',
+    '/main.css', 'Maincss'
 )
 
 app = web.application(urls, globals())
@@ -70,7 +70,7 @@ def render_wrapper(title, template, js_includes=[]):
     else:
         return render.wrapper(title, template, js_includes)
 
-class index:
+class Index:
     def GET(self):
         return render_wrapper('', render.index())
 
@@ -95,7 +95,7 @@ with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
             fields = split_ssv_line(l)
             assert len(fields) == 4
             speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
-class speakers:
+class Speakers:
     def GET(self):
         return render_wrapper('Speakers', render.speakers(speaker_list))
 
@@ -136,11 +136,11 @@ event_list_by_days = list(itertools.imap(lambda x: list(x[1]),
                                              e['start_datetime'].month,
                                              e['start_datetime'].day))
 ))
-class schedule:
+class Schedule:
     def GET(self):
         return render_wrapper('Schedule', render.schedule(event_list_by_days))
 
-class register:
+class Register:
     JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
 
     def GET(self):
@@ -167,15 +167,15 @@ class register:
 
         return render_wrapper('Register', render.register_success(data))
 
-class directions:
+class Directions:
     def GET(self):
         return render_wrapper('Directions', render.directions())
 
-class accommodation:
+class Accommodation:
     def GET(self):
         return render_wrapper('Accommodation', render.accommodation())
 
-class maincss:
+class Maincss:
     def GET(self):
         web.header("Content-Type", "text/css; charset=utf-8")
         return render.main()
