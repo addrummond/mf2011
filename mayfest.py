@@ -144,13 +144,13 @@ class Register:
     JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
 
     def GET(self):
-        return render_wrapper('Register', render.register(), register.JS_EXTRAS)
+        return render_wrapper('Register', render.register(), Register.JS_EXTRAS)
 
     def POST(self):
         data = web.input(friday="no", saturday="no", reception="no", crash="no")
         for k in ('name', 'aff', 'email'):
             if not data.has_key(k) or not data[k]:
-                return render_wrapper('Register', render.register("You must enter your full name, affiliation and email address."), register.JS_EXTRAS)
+                return render_wrapper('Register', render.register("You must enter your full name, affiliation and email address."), Register.JS_EXTRAS)
 
         f = None
         try:
