@@ -106,7 +106,7 @@ blank_or_comment_regex = re.compile(r"^\s*(?:#.*)|(?:\s*)$")
 def is_blank_or_comment(line):
     return re.match(blank_or_comment_regex, line)
 
-# Read speakers CSV db.
+# Read speakers SSV db.
 speaker_list = []
 with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
     for l in speakers_f:
@@ -118,7 +118,7 @@ class speakers:
     def GET(self):
         return render_wrapper('Speakers', render.speakers(map(Opts, speaker_list)))
 
-# Read schedule CSV db.
+# Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
 event_list = []
 with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
