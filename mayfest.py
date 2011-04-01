@@ -12,7 +12,14 @@ import time
 import datetime
 import re
 import itertools
+import types
 
+# Proxy object around a locked file that ensures it's unlocked on __exit__.
+class LockedFile(object):
+    def __init__(self, f): self.f = f
+    def __enter__(self): return self.f
+    def __exit__(self, type, value, traceback): unlock_and_close(self.f)
+    def __getattr__(self, name): return object.__getattribute__(self, name)
 def lock_and_open(filename, mode):
     if os.path.exists(filename):
         f = open(filename, "r") # Open first as read-only.
@@ -20,10 +27,9 @@ def lock_and_open(filename, mode):
         if mode != "r": # If necessary, reopen with the given mode.
             f.close()
             f = open(filename, mode)
-        return f
     else:
         f = open(filename, mode)
-        return f
+    return LockedFile(f)
 def unlock_and_close(f):
     fcntl.flock(f.fileno(), 8)
     f.close()
@@ -70,7 +76,7 @@ def render_wrapper(title, template, js_includes=[]):
     else:
         return render.wrapper(title, template, js_includes)
 
-class Index:
+class Index(object):
     def GET(self):
         return render_wrapper('', render.index())
 
@@ -95,7 +101,7 @@ with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
             fields = split_ssv_line(l)
             assert len(fields) == 4
             speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
-class Speakers:
+class Speakers(object):
     def GET(self):
         return render_wrapper('Speakers', render.speakers(speaker_list))
 
@@ -136,11 +142,11 @@ event_list_by_days = list(itertools.imap(lambda x: list(x[1]),
                                              e['start_datetime'].month,
                                              e['start_datetime'].day))
 ))
-class Schedule:
+class Schedule(object):
     def GET(self):
         return render_wrapper('Schedule', render.schedule(event_list_by_days))
 
-class Register:
+class Register(object):
     JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
 
     def GET(self):
@@ -152,30 +158,27 @@ class Register:
             if not data.has_key(k) or not data[k]:
                 return render_wrapper('Register', render.register("You must enter your full name, affiliation and email address."), Register.JS_EXTRAS)
 
-        f = None
         try:
-            f = lock_and_open(os.path.join(conf.WORKING_DIR, "registrations"), "a")
-            f.write("--\n%s\n" % time.ctime())
-	    def ersatz(s): return s.replace("%", "%25").replace("\r", "%0d").replace("\n", "%0a")
-            for k in ('name', 'aff', 'email', 'friday', 'saturday', 'reception', 'crash', 'comments'):
-                f.write("%s: %s\n" % (k, ersatz(data[k]) if data.has_key(k) else ''))
-            f.write('\n')
+            with lock_and_open(os.path.join(conf.WORKING_DIR, "registrations"), "a") as f:
+                f.write("--\n%s\n" % time.ctime())
+	        def ersatz(s): return s.replace("%", "%25").replace("\r", "%0d").replace("\n", "%0a")
+                for k in ('name', 'aff', 'email', 'friday', 'saturday', 'reception', 'crash', 'comments'):
+                    f.write("%s: %s\n" % (k, ersatz(data[k]) if data.has_key(k) else ''))
+                f.write('\n')
         except IOError:
             web.internalerror()
-        finally:
-            if f: unlock_and_close(f)
 
         return render_wrapper('Register', render.register_success(data))
 
-class Directions:
+class Directions(object):
     def GET(self):
         return render_wrapper('Directions', render.directions())
 
-class Accommodation:
+class Accommodation(object):
     def GET(self):
         return render_wrapper('Accommodation', render.accommodation())
 
-class Maincss:
+class Maincss(object):
     def GET(self):
         web.header("Content-Type", "text/css; charset=utf-8")
         return render.main()
