@@ -166,7 +166,7 @@ class Register(object):
                     f.write("%s: %s\n" % (k, ersatz(data[k]) if data.has_key(k) else ''))
                 f.write('\n')
         except IOError:
-            web.internalerror()
+            raise web.internalerror()
 
         return render_wrapper('Register', render.register_success(data))
 
