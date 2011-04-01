@@ -1,4 +1,23 @@
+$def with (days)
+
 <h3>Schedule</h3>
 <p>
 Schedule to be announced.
 </p>
+<table class="schedule">
+$for d in days:
+    <tr><td colspan="3">${d[0]['start_datetime'].strftime("%A %m/%d %Y")}</td></tr>
+    $for e in d:
+        <tr>
+        <td>${e['start_datetime'].strftime("%H:%M") + ' - ' + e['end_datetime'].strftime("%H:%M")}</td>
+        <td>
+        $if e.get('speaker'):
+            <a href="$e['homepage']">$e['speaker']</a>
+        $e['info']
+        </td>
+        <td>
+        $if e.get('abstractfile'):
+            <a href="XXXXXXXX">ABSXXXXX</a>
+        </td>    
+        </tr>
+</table>
