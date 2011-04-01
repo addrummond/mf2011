@@ -376,7 +376,7 @@ table.schedule th {
     font-weight: normal;
     font-style: normal;
     text-align: left;
-    padding-top: 1em;
+    padding-top: 1.0em;
     padding-bottom: 1em;
     color: $HEADING_COLOR;
 }
@@ -388,8 +388,8 @@ table.schedule td:first-child {
 }
 table.schedule td[colspan="2"] {
     font-size: $SMALL_FONT_SIZE;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
     padding-left: $NORMAL_FONT_SIZE;
     color: $HEADING_COLOR;
 }

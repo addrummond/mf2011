@@ -6,11 +6,10 @@ $for d in days:
     <tr><th colspan="4">${my_strftime(d[0]['start_datetime'], "%A %m/%d")}</td></tr>
     $for e in d:
         $if not e.get('end_datetime'):
-            <tr><td colspan="3"><td colspan="2">${e['info'].upper()}</td></tr>
+            <tr><td></td><td></td><td colspan="2">${e['info'].upper()}</td></tr>
         $else:
             <tr>
-            <td>${my_strftime(e['start_datetime'], "%I:%M")}</td>
-            <td>-</td>
+            <td>${my_strftime(e['start_datetime'], "%I:%M")} - </td>
             <td>${my_strftime(e['end_datetime'], "%I:%M")}</td>
             <td class="info">
             $if e.get('speaker'):
