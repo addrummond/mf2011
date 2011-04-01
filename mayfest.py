@@ -100,7 +100,7 @@ with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
                 event['start_datetime'] = time.strptime(fields[0], iso8601)
                 event['end_datetime'] = time.strptime(datetime.datetime(*event['start_datetime'][:5]).strftime("%Y-%m-%dT" + fields[1]), iso8601)
             except ValueError, e:
-                raise Exception("Error parsing date/time in schedule CSV file: use ISO 8601 format (see e.g. Wikipedia article) (%s)." % str(e))
+                raise Exception("Error parsing date/time in schedule.txt: use ISO 8601 format (see e.g. Wikipedia article) (%s)." % str(e))
             info = fields[2]
             m = re.match(speaker_regex, info)
             if m:
