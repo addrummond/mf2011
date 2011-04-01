@@ -29,13 +29,13 @@ def unlock_and_close(f):
     f.close()
 
 urls = (
-    '/', 'index',
-    '/schedule', 'Schedule',
-    '/speakers', 'Speakers',
-    '/register', 'Register',
-    '/directions', 'Directions',
+    '/',              'Index',
+    '/schedule',      'Schedule',
+    '/speakers',      'Speakers',
+    '/register',      'Register',
+    '/directions',    'Directions',
     '/accommodation', 'Accommodation',
-    '/main.css', 'Maincss'
+    '/main.css',      'Maincss'
 )
 
 app = web.application(urls, globals())
