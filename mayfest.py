@@ -136,7 +136,6 @@ event_list_by_days = list(itertools.imap(lambda x: list(x[1]),
                                              e['start_datetime'].month,
                                              e['start_datetime'].day))
 ))
-print event_list_by_days
 class schedule:
     def GET(self):
         return render_wrapper('Schedule', render.schedule(event_list_by_days))
