@@ -13,7 +13,7 @@
 2011-05-06T15:00;16:00;[Stephani Foraker]
 2011-05-06T16:00;16:30;Discussion
 2011-05-06T18:00;;Party
-2011-05-06T18:00;21:00;From 6:00 onwards there will be dinner and a party chez Collin Phillips and Andrea Zukowski.
+2011-05-06T18:00;21:00;From 6:00 onwards there will be dinner and a party (location TBA).
 
 #
 # Saturday
