@@ -383,6 +383,9 @@ table.schedule th {
 table.schedule tr:first-child th {
     padding-top: 0;
 }
+table.schedule td:first-child {
+    text-align: right;
+}
 table.schedule td[colspan="2"] {
     font-size: $SMALL_FONT_SIZE;
     padding-top: 0.5em;
