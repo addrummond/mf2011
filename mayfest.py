@@ -21,17 +21,11 @@ class LockedFile(object):
     def __exit__(self, type, value, traceback): unlock_and_close(self.f)
     def __getattr__(self, name): return object.__getattribute__(self, name)
 def lock_and_open(filename, mode):
-    if os.path.exists(filename):
-        f = open(filename, "r") # Open first as read-only.
-        fcntl.flock(f.fileno(), 2)
-        if mode != "r": # If necessary, reopen with the given mode.
-            f.close()
-            f = open(filename, mode)
-    else:
-        f = open(filename, mode)
+    f = open(filename, mode)
+    fcntl.lockf(f.fileno(), fcntl.LOCK_EX)
     return LockedFile(f)
 def unlock_and_close(f):
-    fcntl.flock(f.fileno(), 8)
+    fcntl.lockf(f.fileno(), fcntl.LOCK_UN)
     f.close()
 
 urls = (
