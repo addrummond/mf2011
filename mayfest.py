@@ -7,26 +7,12 @@ import web
 import conf
 import StringIO
 import urllib
-import fcntl
 import time
 import datetime
 import re
 import itertools
 import types
-
-# Proxy object around a locked file that ensures it's unlocked on __exit__.
-class LockedFile(object):
-    def __init__(self, f): self.f = f
-    def __enter__(self): return self.f
-    def __exit__(self, type, value, traceback): unlock_and_close(self.f)
-    def __getattr__(self, name): return object.__getattribute__(self, name)
-def lock_and_open(filename, mode):
-    f = open(filename, mode)
-    fcntl.lockf(f.fileno(), fcntl.LOCK_EX)
-    return LockedFile(f)
-def unlock_and_close(f):
-    fcntl.lockf(f.fileno(), fcntl.LOCK_UN)
-    f.close()
+from util import *
 
 urls = (
     '/',              'Index',
@@ -39,17 +25,6 @@ urls = (
 )
 
 app = web.application(urls, globals())
-
-def my_strftime(dt, format_string):
-    return \
-        format_string \
-        .replace("%Y", "%04i" % dt.year) \
-        .replace("%m", str(dt.month)) \
-        .replace("%d", str(dt.day)) \
-        .replace("%A", ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')[dt.weekday()]) \
-        .replace("%H", str(dt.hour)) \
-        .replace("%I", str(dt.hour) if dt.hour <= 12 else str(dt.hour-12)) \
-        .replace("%M", "%02i" % dt.minute)
 
 tglobs = dict(
     int=int,
@@ -70,23 +45,6 @@ def render_wrapper(title, template, js_includes=[]):
     else:
         return render.wrapper(title, template, js_includes)
 
-class Index(object):
-    def GET(self):
-        return render_wrapper('', render.index())
-
-# Splits a line in a semicolon-separated value file in which semicolons
-# may be escaped by '\'.
-ssv_regex = re.compile(r";((?:(?:\\;)|[^\\;])*)")
-def split_ssv_line(line):
-    r = re.findall(ssv_regex, ';' + line.rstrip('\r\n')) # Note that strip interprets the string
-                                                         # as a list of chars, so this /will/ strip
-                                                         # UNIX line endings as well as Windows.
-    return r
-
-blank_or_comment_regex = re.compile(r"^\s*(?:#.*)|(?:\s*)$")
-def is_blank_or_comment(line):
-    return re.match(blank_or_comment_regex, line)
-
 # Read speakers SSV db.
 speaker_list = []
 with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
@@ -95,9 +53,6 @@ with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
             fields = split_ssv_line(l)
             assert len(fields) == 4
             speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
-class Speakers(object):
-    def GET(self):
-        return render_wrapper('Speakers', render.speakers(speaker_list))
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
@@ -136,6 +91,15 @@ event_list_by_days = list(itertools.imap(lambda x: list(x[1]),
                                              e['start_datetime'].month,
                                              e['start_datetime'].day))
 ))
+
+class Speakers(object):
+    def GET(self):
+        return render_wrapper('Speakers', render.speakers(speaker_list))
+
+class Index(object):
+    def GET(self):
+        return render_wrapper('', render.index())
+
 class Schedule(object):
     def GET(self):
         return render_wrapper('Schedule', render.schedule(event_list_by_days))
