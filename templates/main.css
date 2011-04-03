@@ -365,6 +365,7 @@ ul.hotels li p + p {
 table.schedule td {
     padding-bottom: 0.25em;
     padding-right: 0.25em;
+    vertical-align: top;
 }
 table.schedule tr:last-child td {
     padding-bottom: 0;
@@ -382,6 +383,10 @@ table.schedule tr:first-child th {
 }
 table.schedule td:first-child {
     text-align: right;
+    color: $MEDIUM_COLOR;
+}
+table.schedule td:first-child + td {
+    color: $MEDIUM_COLOR;
 }
 table.schedule td[colspan="2"] {
     font-size: $SMALL_FONT_SIZE;
@@ -391,7 +396,17 @@ table.schedule td[colspan="2"] {
     color: $HEADING_COLOR;
 }
 table.schedule td.info {
-    max-width: 25em;
+    max-width: 30em;
     padding-left: $NORMAL_FONT_SIZE;
     padding-right: $NORMAL_FONT_SIZE;    
+}
+
+ul.abstracts {
+    padding-left: 0;
+    margin-left: 0;
+}
+ul.abstracts li {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
 }

@@ -13,7 +13,11 @@ $for d in days:
             <td>${my_strftime(e['end_datetime'], "%I:%M")}</td>
             <td class="info">
             $if e.get('speaker'):
-                <a href="$e['homepage']">$e['speaker']</a>$e['info']
+                $if e.get('abstract_title'):
+                    $e['speaker']$e['info']
+                    <a href="$url_for('/speakers#' + e['speaker'] + '_abstract')">$e['abstract_title']</a>
+                $else:
+                    $e['speaker']${e['info']}
             $else:
                 $e['info']
             </td>

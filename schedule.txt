@@ -3,7 +3,7 @@
 #
 2011-05-06T09:00;09:30;Breakfast & Welcome
 2011-05-06T09:30;;Session 1
-2011-05-06T09:30;10:30;[Howard Lasnik]: Pronouns in generative syntax
+2011-05-06T09:30;10:30;[Howard Lasnik]
 2011-05-06T10:30;10:45;Break
 2011-05-06T10:45;11:45;[Ken Safir]
 2011-05-06T11:45;12:45;[Eric Reuland]

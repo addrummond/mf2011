@@ -29,6 +29,7 @@ app = web.application(urls, globals())
 tglobs = dict(
     int=int,
     str=str,
+    reduce=reduce,
     url_for=conf.url_for,
     websafe=web.websafe,
     my_strftime=my_strftime
@@ -52,7 +53,23 @@ with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
         if not is_blank_or_comment(l):
             fields = split_ssv_line(l)
             assert len(fields) == 4
-            speaker_list.append(dict(name=fields[0], institution=fields[1], homepage=fields[2], abstractfile=fields[3]))
+
+            # Read in abstract.
+            abstract_title = None
+            abstract_html = None
+            if fields[3]:
+                abstract_fname = os.path.join(conf.WORKING_DIR, fields[3])
+                with open(abstract_fname) as abstract_f:
+                    abstract_title = abstract_f.readline().rstrip()
+                    if not abstract_title:
+                        raise Exception("Couldn't get title for abstract file '%s'" % abstract_fname)
+                    abstract_html = abstract_f.read()
+
+            speaker_list.append(dict(name=fields[0],
+                                     institution=fields[1],
+                                     homepage=fields[2],
+                                     abstract_title=abstract_title,
+                                     abstract_html=abstract_html))
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
@@ -79,7 +96,8 @@ with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
                 s = [s for s in speaker_list if s['name'] == m.group(1)]
                 if len(s) < 1:
                     raise Exception("Unknown speaker referenced in schedule.txt: '%s'" % m.group(1))
-                event['abstractfile'] = s[0]['abstractfile']
+                event['abstract_title'] = s[0]['abstract_title']
+                event['abstract_html'] = s[0]['abstract_html']
                 event['homepage'] = s[0]['homepage']
             else:
                 event['info'] = info

@@ -8,14 +8,24 @@ $def speaker(info):
         <a href="$info['homepage']">
     $:(websafe(info['name']) + ('</a>,' if info['homepage'] else ','))
     $info['institution']
+    $if info.get('abstract_title'):
+        <a href="#${info['name']}_abstract">&#8595;abstract</a>
     </li>
-    $if info['abstractfile']:
-        <a href="$url_for('/static/' + info['abstractfile'])">[abstract]</a>
 $for s in speaker_list:
     $:speaker(s)
 </ul>
 
 <h3>Abstracts</h3>
-<p>
-Abstracts will be uploaded when available.
-</p>
+$if not reduce(lambda x, y: x or y, [s.get('abstract_title') for s in speaker_list]):
+    <p>
+    Abstracts will be uploaded when available.
+    </p>
+$else:
+    <ul class="abstracts">
+    $for s in speaker_list:
+        $if s.get('abstract_title'):
+            <li id="${s['name']}_abstract">
+            <h4>$s['name'] &mdash; $s['abstract_title']</h4>
+            $:s['abstract_html']
+            </li>
+    </ul>
