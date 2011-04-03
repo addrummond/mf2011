@@ -1,4 +1,4 @@
-Ash Asudeh;University of Oxford;http://http-server.carleton.ca/~asudeh/;
+Ash Asudeh;University of Oxford and Carleton University;http://users.ox.ac.uk/~cpgl0036/;
 Paul Elbourne;Queen Mary, University of London;http://webspace.qmul.ac.uk/pdelbourne/index.html;
 Stephani Foraker;Buffalo State;http://faculty.buffalostate.edu/forakesm/;
 Jeanette Gundel;University of Minnesota;http://linguistics.umn.edu/people/profile.php?UID=gunde003;
