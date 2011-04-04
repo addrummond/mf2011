@@ -60,7 +60,7 @@ def render_wrapper(title, template, js_includes=[]):
 speaker_list = []
 def read_in_speaker_list():
     global speaker_list
-    speaker_list = []
+    new_speaker_list = []
     with open(os.path.join(conf.WORKING_DIR, "speakers.txt")) as speakers_f:
         for l in speakers_f:
             if not is_blank_or_comment(l):
@@ -78,20 +78,19 @@ def read_in_speaker_list():
                             raise Exception("Couldn't get title for abstract file '%s'" % abstract_fname)
                         abstract_html = abstract_f.read()
 
-                speaker_list.append(dict(name=fields[0],
-                                         institution=fields[1],
-                                         homepage=fields[2],
-                                         abstract_title=abstract_title,
-                                         abstract_html=abstract_html))
+                new_speaker_list.append(dict(name=fields[0],
+                                             institution=fields[1],
+                                             homepage=fields[2],
+                                             abstract_title=abstract_title,
+                                             abstract_html=abstract_html))
+    speaker_list = new_speaker_list
 read_in_speaker_list()
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
 blank_regex = re.compile(r"^\s*$")
-event_list = []
 event_list_by_days = []
 def read_in_event_list():
-    global event_list
     global event_list_by_days
     event_list = []
     with open(os.path.join(conf.WORKING_DIR, "schedule.txt")) as schedule_f:
