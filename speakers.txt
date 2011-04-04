@@ -5,6 +5,6 @@ Jeanette Gundel;University of Minnesota;http://linguistics.umn.edu/people/profil
 Petra Hendriks;Center for Language and Cognition Gronigen;http://www.let.rug.nl/~hendriks/engels.htm;
 Angelika Kratzer;University of Massachusetts, Amherst;http://people.umass.edu/kratzer/;
 Howard Lasnik;University of Maryland;http://www.ling.umd.edu/~lasnik/;
-Eric Reuland;Utrecht University;;
+Eric Reuland;Utrecht University;http://eric.reuland.nl/httpdocs/Welcome.html;
 Jeff Runner;University of Rochester;http://www.ling.rochester.edu/people/runner/runner.html;
 Ken Safir;Rutgers;http://ruccs.rutgers.edu/~safir/;
