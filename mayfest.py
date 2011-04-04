@@ -148,8 +148,6 @@ if HAVE_WATCHDOG:
                 if self.actions.has_key(filename):
                     self.actions[filename]()
 
-    print "Watching speakers.txt and schedule.txt using watchdog library..."
-
     observer = watchdog.observers.Observer()
     observer.schedule(MyEventHandler({
                           'speakers.txt': read_in_speaker_list,
