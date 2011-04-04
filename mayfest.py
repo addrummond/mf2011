@@ -153,7 +153,7 @@ if HAVE_WATCHDOG:
     observer = watchdog.observers.Observer()
     observer.schedule(MyEventHandler({
                           'speakers.txt': read_in_speaker_list,
-                          'schedule.txt': read_in_event_list()
+                          'schedule.txt': read_in_event_list
                       }),
                       path=BASE,
                       recursive=False)
