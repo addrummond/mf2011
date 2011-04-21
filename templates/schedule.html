@@ -6,7 +6,7 @@ $for d in days:
     <tr><th colspan="4">${my_strftime(d[0]['start_datetime'], "%A %m/%d")}</td></tr>
     $for e in d:
         $if not e.get('end_datetime'):
-            <tr><td></td><td></td><td colspan="2">${e['info'].upper()}</td></tr>
+            <tr><td></td><td></td><td colspan="2">$:{e['info'].upper()}</td></tr>
         $else:
             <tr>
             <td>${my_strftime(e['start_datetime'], "%I:%M")} - </td>
@@ -14,12 +14,12 @@ $for d in days:
             <td class="info">
             $if e.get('speaker'):
                 $if e.get('abstract_title'):
-                    $e['speaker']$e['info']
+                    $e['speaker']$:e['info']
                     <a href="$url_for('/speakers#' + e['speaker'] + '_abstract')">$e['abstract_title']</a>
                 $else:
-                    $e['speaker']${e['info']}
+                    $e['speaker']$:{e['info']}
             $else:
-                $e['info']
+                $:e['info']
             </td>
             <td>
             $if e.get('abstractfile'):
