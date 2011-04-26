@@ -12,7 +12,8 @@ def lock_and_open(filename, mode):
     fcntl.lockf(f.fileno(), fcntl.LOCK_EX)
     return LockedFile(f)
 def unlock_and_close(f):
-    fcntl.lockf(f.fileno(), fcntl.LOCK_UN)
+    # Apparently, unlocking before closing can lead to data loss.
+    #fcntl.lockf(f.fileno(), fcntl.LOCK_UN)
     f.close()
 
 # Format dates/times in a sensible way which puts leading zeros in the right places.
