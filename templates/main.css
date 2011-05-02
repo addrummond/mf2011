@@ -363,8 +363,8 @@ ul.hotels li p + p {
 }
 
 table.schedule td {
-    padding-bottom: 0.25em;
-    padding-right: 0.25em;
+    padding-bottom: 0.5em;
+    padding-right: 0.5em;
     vertical-align: top;
 }
 table.schedule tr:last-child td {
@@ -391,7 +391,7 @@ table.schedule td:first-child + td {
 table.schedule td[colspan="2"] {
     font-size: $SMALL_FONT_SIZE;
     padding-top: 0.75em;
-    padding-bottom: 0.75em;
+    padding-bottom: 1em;
     padding-left: $NORMAL_FONT_SIZE;
     color: $HEADING_COLOR;
 }
@@ -409,4 +409,13 @@ ul.abstracts li {
     list-style: none;
     margin-left: 0;
     padding-left: 0;
+}
+
+div.references p {
+    padding-left: 2em;
+    text-indent: -2em;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0;
 }

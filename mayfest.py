@@ -56,6 +56,17 @@ def render_wrapper(title, template, js_includes=[]):
     else:
         return render.wrapper(title, template, js_includes)
 
+BLANK_RE = re.compile(r"^\s*$")
+def read_in_abstract(fname):
+    with open(fname) as f:
+        abstract_title = f.readline().rstrip()
+        if not abstract_title:
+            raise Exception("Couldn't get title for abstract file '%s'" % fname)
+        abstract_html = f.read()
+        if re.match(BLANK_RE, abstract_html):
+            abstract_html = "" # Ensure it counts as False in conditionals.
+        return abstract_title, abstract_html
+
 # Read speakers SSV db.
 speaker_list = []
 def read_in_speaker_list():
@@ -71,16 +82,11 @@ def read_in_speaker_list():
                 abstract_title = None
                 abstract_html = None
                 if fields[3]:
-                    abstract_fname = os.path.join(conf.WORKING_DIR, fields[3])
-                    with open(abstract_fname) as abstract_f:
-                        abstract_title = abstract_f.readline().rstrip()
-                        if not abstract_title:
-                            raise Exception("Couldn't get title for abstract file '%s'" % abstract_fname)
-                        abstract_html = abstract_f.read()
-
+                    abstract_title, abstract_html = read_in_abstract(os.path.join(conf.WORKING_DIR, 'abstracts', fields[3]))
                 new_speaker_list.append(dict(name=fields[0],
                                              institution=fields[1],
                                              homepage=fields[2],
+                                             abstract_file=fields[3],
                                              abstract_title=abstract_title,
                                              abstract_html=abstract_html))
     speaker_list = new_speaker_list
@@ -135,26 +141,37 @@ def read_in_event_list():
     ))
 read_in_event_list()
 
-# Automatically reread speakers.txt and schedule.txt
+# Automatically reread speakers.txt, schedule.txt and the files in 'abstracts/'.
 if HAVE_WATCHDOG:
     class MyEventHandler(watchdog.events.FileSystemEventHandler):
-        def __init__(self, actions):
-            self.actions = actions
+        def __init__(self, action):
+            self.action = action
             super(watchdog.events.FileSystemEventHandler, self).__init__()
         def on_modified(self, e):
             if not e.is_directory:
                 filename = os.path.split(e.src_path)[1]
-                if self.actions.has_key(filename):
-                    self.actions[filename]()
+                self.action(filename)
 
-    observer = watchdog.observers.Observer()
-    observer.schedule(MyEventHandler({
-                          'speakers.txt': read_in_speaker_list,
-                          'schedule.txt': read_in_event_list
-                      }),
-                      path=BASE,
-                      recursive=False)
-    observer.start()
+    # Watch for changes to speakers.txt and schedule.txt
+    ss_observer = watchdog.observers.Observer()
+    ss_observer.schedule(MyEventHandler(lambda fname: {
+                             'speakers.txt': read_in_speaker_list,
+                             'schedule.txt': read_in_event_list
+                         }.get(fname, lambda: ())()),
+                         path=BASE,
+                         recursive=False)
+    ss_observer.start()
+
+    # Watch for changes to abstracts.
+    abs_observer = watchdog.observers.Observer()
+    def abs_handler(fname):
+        for s in speaker_list:
+            if s['abstract_file'] == fname:
+                abstract_title, abstract_html = read_in_abstract(fname)
+                s['abstract_title'] = abstract_title
+                s['abstract_html'] = abstract_html
+                break
+    abs_observer.schedule(MyEventHandler(abs_handler), path=os.path.join(BASE, 'abstracts'), recursive=False)
 
 class Speakers(object):
     def GET(self):

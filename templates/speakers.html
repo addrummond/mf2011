@@ -8,7 +8,7 @@ $def speaker(info):
         <a href="$info['homepage']">
     $:(websafe(info['name']) + ('</a>,' if info['homepage'] else ','))
     $info['institution']
-    $if info.get('abstract_title'):
+    $if info.get('abstract_title') and info.get('abstract_html'):
         <a href="#${info['name']}_abstract">&#8595;abstract</a>
     </li>
 $for s in speaker_list:
@@ -23,9 +23,9 @@ $if not reduce(lambda x, y: x or y, [s.get('abstract_title') for s in speaker_li
 $else:
     <ul class="abstracts">
     $for s in speaker_list:
-        $if s.get('abstract_title'):
+        $if s.get('abstract_title') and s.get('abstract_html'):
             <li id="${s['name']}_abstract">
-            <h4>$s['name'] &mdash; $s['abstract_title']</h4>
+            <h4>$s['name']: <i>$s['abstract_title']</i></h4>
             $:s['abstract_html']
             </li>
     </ul>

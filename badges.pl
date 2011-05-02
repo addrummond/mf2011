@@ -204,7 +204,7 @@ sub draw_badges {
 }
 
 # Parse 'registrations' file.
-use constant REQUIRED_KEYS => qw( name aff email friday saturday reception crash ); # 'comments' not required.
+use constant REQUIRED_KEYS => qw( aff email friday saturday reception crash ); # 'comments' not required.
 open my $regs, "registrations" or die "Unable to open 'registrations' file.";
 my $state = 'initial';
 my @records;
@@ -220,7 +220,7 @@ for my $line (<$regs>) {
         else { die "Error parsing 'records'."; }
     }
     elsif ($state eq 'date') {
-        if ($line !~ /^\s*(?:(?:Mon)|(?:Tue)|(?:Wed)|(?:Thu)|(?:Fri))\s+(?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))\s+\d{1,2} \d\d:\d\d:\d\d\s+\d\d\d\d\s*$/) {
+        if ($line !~ /^\s*(?:(?:Mon)|(?:Tue)|(?:Wed)|(?:Thu)|(?:Fri)|(?:Sat)|(?:Sun))\s+(?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))\s+\d{1,2} \d\d:\d\d:\d\d\s+\d\d\d\d\s*$/) {
             die "Bad date ('$line')";
         }
         else { $state = 'in_record'; }
