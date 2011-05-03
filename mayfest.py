@@ -56,14 +56,14 @@ def render_wrapper(title, template, js_includes=[]):
     else:
         return render.wrapper(title, template, js_includes)
 
-BLANK_RE = re.compile(r"^\s*$")
+blank_regex = re.compile(r"^\s*$")
 def read_in_abstract(fname):
     with open(fname) as f:
         abstract_title = f.readline().rstrip()
         if not abstract_title:
             raise Exception("Couldn't get title for abstract file '%s'" % fname)
         abstract_html = f.read()
-        if re.match(BLANK_RE, abstract_html):
+        if re.match(blank_regex, abstract_html):
             abstract_html = "" # Ensure it counts as False in conditionals.
         return abstract_title, abstract_html
 
@@ -94,7 +94,6 @@ read_in_speaker_list()
 
 # Read schedule SSV db.
 speaker_regex = re.compile(r"^\s*\[([^]]+)\](.*)$")
-blank_regex = re.compile(r"^\s*$")
 event_list_by_days = []
 def read_in_event_list():
     global event_list_by_days
