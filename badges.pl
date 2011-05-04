@@ -9,23 +9,24 @@ use List::Util qw( max min );
 use constant {
     PTS_IN_ONE_IN => 72,
 
-    PAGE_WIDTH => 8.5,
+    PAGE_WIDTH => 4.75, #8.5,
     PAGE_HEIGHT => 11,
-    PAGE_LEFT_MARGIN => 1,
-    PAGE_RIGHT_MARGIN => 1,
-    PAGE_TOP_MARGIN => 1,
-    PAGE_BOTTOM_MARGIN => 1,
-    BADGE_WIDTH => 2.75,
-    BADGE_HEIGHT => 1.8,
+    PAGE_LEFT_MARGIN => 0.284, #1,
+    PAGE_RIGHT_MARGIN => 0,#1,
+    PAGE_TOP_MARGIN => 0.984 - 0.204 + 0.031496063 - 0.0157480315 + 0.00393700787*0.15,#1,
+    PAGE_BOTTOM_MARGIN => 0.7,
+    BADGE_WIDTH => 3.94 + 0.137795276,#,2.75,
+    BADGE_HEIGHT => 2.992 + 0.1181 - 0.00393700787*0.75,
     BADGE_LEFT_MARGIN => 0.1,
     BADGE_RIGHT_MARGIN => 0.1,
     BADGE_TOP_MARGIN => 0.1,
-    BADGE_BOTTOM_MARGIN => 0.1,
-    BADGE_H_SPACING => 0.5,
-    BADGE_V_SPACING => 0.5,
+    BADGE_BOTTOM_MARGIN => 0,
+    BADGE_H_SPACING => 0,#0.5,
+    BADGE_V_SPACING => 0,#0.5,
     BADGE_WIDTH_PROPORTION => 0.25,
 
     TITLE => "Mayfest 2011",
+    SUBTITLE => "The Interpretation of Pronouns",
 
     NAME_CENTER_OFFSET => -0.1,
     SPACING_BELOW_NAME => 0.2,
@@ -33,15 +34,18 @@ use constant {
     INSTITUTION_RIGHT_NUDGE => 0,
 
     TITLE_MAX_FONT_SIZE => 50,
+    SUBTITLE_MAX_FONT_SIZE => 10,
     NAME_MAX_FONT_SIZE => 20,
     INSTITUTION_MAX_FONT_SIZE => 15,
 
     FONT_SIZE_EPSILON => 2,
 };
 use constant TITLE_COLOR => (182/255, 0, 0);
+use constant SUBTITLE_COLOR => (0, 0, 0);
 use constant NAME_COLOR => (0, 0, 0);
 use constant INSTITUTION_COLOR => (0, 0, 0);
 use constant TITLE_FONT => ("Verdana", "normal", "normal");
+use constant SUBTITLE_FONT => ("Verdana", "italic", "normal");
 use constant NAME_FONT => ("Verdana", "normal", "normal");
 use constant INSTITUTION_FONT => ("Verdana", "italic", "normal");
 
@@ -103,9 +107,9 @@ sub draw_badge {
     # Change origin to ($x, $y) and scale to inches instead of points.
     with_transform {
         # Draw bounding rectangle.
-        $cr->rectangle(0, 0, BADGE_WIDTH, BADGE_HEIGHT);
-        $cr->set_line_width(pt_to_in(0.5));
-        $cr->stroke();
+#        $cr->rectangle(0, 0, BADGE_WIDTH, BADGE_HEIGHT);
+#        $cr->set_line_width(pt_to_in(0.5));
+#        $cr->stroke();
 
         # Draw UMD logo.
         my $logo_surface_pattern = Cairo::SurfacePattern->create($logo_surface);
@@ -137,6 +141,24 @@ sub draw_badge {
         $cr->move_to(pt_to_in($logo_portion_pts), -$title_extents->{y_bearing} + ($logo_vportion/2) - ($title_extents->{height}/2));
         $cr->text_path(TITLE);
         $cr->set_source_rgb(TITLE_COLOR);
+        $cr->fill();
+
+        # Draw subtitle.
+        $cr->select_font_face(SUBTITLE_FONT);
+        $cr->set_font_size(
+            get_best_font_size(
+                pt_to_in(SUBTITLE_MAX_FONT_SIZE),
+                SUBTITLE,
+                pt_to_in($badge_width_in_pts-$logo_portion_pts) - BADGE_RIGHT_MARGIN,
+                BADGE_HEIGHT, # Again, width is real constraint.
+                pt_to_in(FONT_SIZE_EPSILON)
+            )
+        );
+        my $subtitle_extents = $cr->text_extents(SUBTITLE);
+        $cr->move_to((BADGE_WIDTH-$subtitle_extents->{width})/2,
+                     -$subtitle_extents->{y_bearing} + ($logo_vportion/2) + $title_extents->{height} - ($subtitle_extents->{height}/2));
+        $cr->text_path(SUBTITLE);
+        $cr->set_source_rgb(SUBTITLE_COLOR);
         $cr->fill();
 
         # Draw person's name.
