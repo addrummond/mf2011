@@ -13,7 +13,7 @@
 2011-05-06T15:15;16:15;[Petra Hendriks]
 2011-05-06T16:15;17:15;Discussion
 2011-05-06T18:00;;Party
-2011-05-06T18:00;21:00;From 6:00 onwards there will be dinner and a party at Prof. Colin Phillips' house <a href="http://maps.google.com/maps?f=d&source=s_d&saddr=Regents+Dr&daddr=4116+Woodberry+St,+Hyattsville,+MD+20782&hl=en&geocode=FZzcUgIdxvxp-w%3BFcO6UgId9Opp-ylnFC8b68a3iTEONgmiLADSTQ&mra=me&mrsp=0&sz=17&sll=38.984057,-76.940453&sspn=0.00653,0.010922&ie=UTF8&ll=38.979512,-76.938243&spn=0.013061,0.021844&z=16">(directions)</a>.
+2011-05-06T18:00;21:00;From 6:00 onwards there will be dinner and a party at Colin Phillips' and Andrea Zukowski's house <a href="http://maps.google.com/maps?f=d&source=s_d&saddr=Regents+Dr&daddr=4116+Woodberry+St,+Hyattsville,+MD+20782&hl=en&geocode=FZzcUgIdxvxp-w%3BFcO6UgId9Opp-ylnFC8b68a3iTEONgmiLADSTQ&mra=me&mrsp=0&sz=17&sll=38.984057,-76.940453&sspn=0.00653,0.010922&ie=UTF8&ll=38.979512,-76.938243&spn=0.013061,0.021844&z=16">(directions)</a>.
 
 #
 # Saturday
