@@ -188,9 +188,15 @@ class Register(object):
     JS_EXTRAS = [conf.url_for('/static/register.js'), conf.url_for('/static/jquery.simplemodal.js')]
 
     def GET(self):
-        return render_wrapper('Register', render.register(), Register.JS_EXTRAS)
+        if conf.__dict__.has_key('REGISTRATION_CLOSED') and conf.REGISTRATION_CLOSED:
+            return render_wrapper('Register', render.register_closed())
+        else:
+            return render_wrapper('Register', render.register(), Register.JS_EXTRAS)
 
     def POST(self):
+        if conf.__dict__.has_key('REGISTRATION_CLOSED') and conf.REGISTRATION_CLOSED:
+            raise web.badrequest()
+
         data = web.input(friday="no", saturday="no", reception="no", crash="no")
         for k in ('name', 'aff', 'email'):
             if not data.has_key(k) or not data[k]:
